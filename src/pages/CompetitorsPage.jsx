@@ -1,22 +1,21 @@
 import { useState } from 'react'
+import { useOutletContext } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { BarChart, Bar, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts'
 import { getCompetitors } from '../api/amazon'
 import { useAsync } from '../hooks/useAsync'
+import { useToast } from '../components/Toast'
 import { formatCompact, formatCurrency } from '../utils/format'
 import { SearchBar, SkeletonTable, ErrorState, EmptyState, SectionTitle } from '../components/ui'
 import { chartTooltipStyle } from '../components/ProductDetailModal'
 import NicheScoreCard from '../components/NicheScoreCard'
 import ComparisonTable from '../components/ComparisonTable'
 
-function CompareChart({ products }) {
-  const data = products.map((p, i) => ({
-    name: `#${p.rank || i + 1}`,
-    revenue: p.revenue,
-    reviews: p.reviews,
-  }))
+function CompareChart({ products, title }) {
+  const data = products.map((p, i) => ({ name: `#${p.rank || i + 1}`, revenue: p.revenue, reviews: p.reviews }))
   return (
     <div className="card p-5">
-      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">Revenue vs Reviews (competition map)</h2>
+      <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-slate-500">{title}</h2>
       <ResponsiveContainer width="100%" height={240}>
         <BarChart data={data} margin={{ top: 4, right: 8, left: -4, bottom: 0 }}>
           <CartesianGrid stroke="#e5e7eb" strokeDasharray="3 3" vertical={false} />
@@ -33,7 +32,10 @@ function CompareChart({ products }) {
   )
 }
 
-export default function CompetitorsPage({ saved, onOpenProduct }) {
+export default function CompetitorsPage() {
+  const { saved, openProduct } = useOutletContext()
+  const { t } = useTranslation()
+  const toast = useToast()
   const [asin, setAsin] = useState('')
   const { loading, error, data, ran, run } = useAsync(getCompetitors)
 
@@ -44,17 +46,23 @@ export default function CompetitorsPage({ saved, onOpenProduct }) {
     run(term)
   }
 
+  const toggleSave = (p) => {
+    const was = saved.has(p.asin)
+    saved.toggle(p)
+    was ? toast?.info(t('toast.removed')) : toast?.success(t('toast.saved'))
+  }
+
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-xl font-bold text-slate-900">Competitor Analysis</h1>
-        <p className="mt-1 text-sm text-slate-500">Enter an ASIN to pull its top 10 competing products and compare them side by side.</p>
+        <h1 className="text-xl font-bold text-slate-900">{t('competitors.title')}</h1>
+        <p className="mt-1 text-sm text-slate-500">{t('competitors.subtitle')}</p>
       </div>
 
-      <SearchBar value={asin} onChange={setAsin} onSubmit={() => go()} loading={loading} placeholder="e.g. B0XXXXXXXX (any ASIN works in mock mode)" button="Analyze" />
+      <SearchBar value={asin} onChange={setAsin} onSubmit={() => go()} loading={loading} placeholder={t('competitors.placeholder')} button={t('common.analyze')} />
       {!ran && (
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-xs text-slate-400">Try:</span>
+          <span className="text-xs text-slate-400">{t('search.try')}</span>
           {['B08N5WRWNW', 'B07PXGQC1Q', 'B09JQMJHXY'].map((ex) => (
             <button key={ex} onClick={() => go(ex)} className="chip border border-line bg-surface font-mono text-slate-600 hover:border-brand/50 hover:text-brand">
               {ex}
@@ -65,18 +73,17 @@ export default function CompetitorsPage({ saved, onOpenProduct }) {
 
       {loading && <SkeletonTable rows={10} cols={8} />}
       {!loading && error && <ErrorState message={error} onRetry={() => go()} />}
-      {!loading && !error && !ran && <EmptyState icon="🥊" title="Size up the competition" hint="Paste an ASIN to see who you'd be up against and how strong they are." />}
+      {!loading && !error && !ran && <EmptyState icon="🥊" title={t('competitors.emptyTitle')} hint={t('competitors.emptyHint')} />}
 
       {!loading && !error && data?.length > 0 && (
         <div className="space-y-6">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <NicheScoreCard products={data} />
-            <CompareChart products={data} />
+            <CompareChart products={data} title={t('competitors.map')} />
           </div>
-
           <div>
-            <SectionTitle hint="Click any row to open full details.">Top {data.length} competitors</SectionTitle>
-            <ComparisonTable products={data} isSaved={saved.has} onToggleSave={saved.toggle} onOpen={onOpenProduct} />
+            <SectionTitle hint={t('competitors.clickRow')}>{t('competitors.top', { n: data.length })}</SectionTitle>
+            <ComparisonTable products={data} isSaved={saved.has} onToggleSave={toggleSave} onOpen={openProduct} />
           </div>
         </div>
       )}

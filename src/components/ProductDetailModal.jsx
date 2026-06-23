@@ -1,8 +1,9 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, CartesianGrid } from 'recharts'
 import { formatCurrency, formatCompact, formatNumber, formatRank } from '../utils/format'
 import { estimateMargin } from '../utils/estimates'
-import { METRICS } from '../utils/metrics'
+import { useMetrics } from '../hooks/useMetrics'
 import { Stat, RatingStars, Badge } from './ui'
 import { XIcon, BookmarkIcon, BookmarkFilledIcon, ExternalIcon } from './icons'
 import ProductImage from './ProductImage'
@@ -41,6 +42,8 @@ function MiniChart({ title, data, color, formatter }) {
 }
 
 export default function ProductDetailModal({ product, onClose, saved, onToggleSave }) {
+  const { t } = useTranslation()
+  const METRICS = useMetrics()
   useEffect(() => {
     const onKey = (e) => e.key === 'Escape' && onClose()
     window.addEventListener('keydown', onKey)
@@ -111,11 +114,11 @@ export default function ProductDetailModal({ product, onClose, saved, onToggleSa
             onClick={() => onToggleSave(p)}
           >
             {saved ? <BookmarkFilledIcon size={16} /> : <BookmarkIcon size={16} />}
-            {saved ? 'Saved to list' : 'Save product'}
+            {saved ? t('common.saved') : t('common.save')}
           </button>
           {p.url && p.url !== '#' && (
             <a className="btn-ghost" href={p.url} target="_blank" rel="noreferrer">
-              <ExternalIcon size={16} /> View on Amazon
+              <ExternalIcon size={16} /> {t('common.viewOnAmazon')}
             </a>
           )}
         </div>

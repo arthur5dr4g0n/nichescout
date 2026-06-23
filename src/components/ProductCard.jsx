@@ -1,10 +1,13 @@
+import { useTranslation } from 'react-i18next'
 import { formatCurrency, formatCompact, formatNumber, formatRank } from '../utils/format'
-import { METRICS } from '../utils/metrics'
+import { useMetrics } from '../hooks/useMetrics'
 import { Stat, RatingStars, Badge } from './ui'
 import { BookmarkIcon, BookmarkFilledIcon, ChartIcon } from './icons'
 import ProductImage from './ProductImage'
 
 export default function ProductCard({ product, saved, onToggleSave, onOpen }) {
+  const { t } = useTranslation()
+  const METRICS = useMetrics()
   const p = product
   return (
     <div className="card animate-fadein flex flex-col p-4 transition-shadow hover:shadow-pop">
@@ -30,14 +33,14 @@ export default function ProductCard({ product, saved, onToggleSave, onOpen }) {
         <Stat label="Sellers" value={p.sellers} hint={METRICS.sellers} />
         <Stat label="FBA fee" value={formatCurrency(p.fbaFee)} hint={METRICS.fba} accent="text-red-600" />
         <div className="col-span-2 flex flex-col">
-          <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">Rating</span>
+          <span className="text-[11px] font-medium uppercase tracking-wide text-slate-400">{t('bestsellers.colRating')}</span>
           <RatingStars value={p.rating} />
         </div>
       </div>
 
       <div className="mt-4 flex gap-2 border-t border-line pt-3">
         <button className="btn-ghost flex-1" onClick={() => onOpen(p)}>
-          <ChartIcon size={16} /> Details
+          <ChartIcon size={16} /> {t('common.details')}
         </button>
         <button
           className={`btn flex-1 border ${
@@ -46,7 +49,7 @@ export default function ProductCard({ product, saved, onToggleSave, onOpen }) {
           onClick={() => onToggleSave(p)}
         >
           {saved ? <BookmarkFilledIcon size={16} /> : <BookmarkIcon size={16} />}
-          {saved ? 'Saved' : 'Save'}
+          {saved ? t('common.saved') : t('common.save')}
         </button>
       </div>
     </div>

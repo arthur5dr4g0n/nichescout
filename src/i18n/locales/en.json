@@ -1,0 +1,148 @@
+{
+  "brand": { "tagline": "Find the niches that pay" },
+  "nav": {
+    "dashboard": "Dashboard", "dashboardDesc": "Hot niches today",
+    "search": "Search", "searchDesc": "Find & analyze",
+    "keywords": "Keywords", "keywordsDesc": "Volume, CPC, trends",
+    "competitors": "Competitors", "competitorsDesc": "Compare top 10",
+    "trends": "Trends", "trendsDesc": "Rising & declining",
+    "bestsellers": "Best Sellers", "bestsellersDesc": "Top by category",
+    "saved": "Saved", "savedDesc": "Your shortlist",
+    "board": "Research Board", "boardDesc": "Kanban pipeline",
+    "assistant": "AI Assistant", "assistantDesc": "Factual FBA Q&A",
+    "buzz": "🔥 FBA Buzz"
+  },
+  "common": {
+    "refresh": "refresh", "updatedAgo": "updated {{time}}", "updating": "updating…",
+    "live": "Live", "mock": "Mock", "cached": "Cached",
+    "save": "Save", "saved": "Saved", "remove": "Remove",
+    "exportCsv": "Export CSV", "clearAll": "Clear all", "clear": "Clear",
+    "add": "Add", "send": "Send", "tryAgain": "Try again",
+    "details": "Details", "viewOnAmazon": "View on Amazon",
+    "loading": "Loading…", "search": "Search", "analyze": "Analyze", "research": "Research",
+    "language": "Language", "login": "Log in", "logout": "Log out", "guest": "Guest",
+    "justNow": "just now", "minAgo": "{{n}}m ago", "hAgo": "{{n}}h ago", "dAgo": "{{n}}d ago"
+  },
+  "offline": { "banner": "You're offline — showing cached / mock data." },
+  "auth": {
+    "loginTitle": "Log in", "signupTitle": "Create account",
+    "email": "Email", "password": "Password", "confirmPassword": "Confirm password",
+    "rememberMe": "Remember me", "forgotPassword": "Forgot password?",
+    "signIn": "Sign in", "createAccount": "Create account",
+    "noAccount": "No account?", "haveAccount": "Already have an account?",
+    "signupHere": "Sign up", "loginHere": "Log in",
+    "resetTitle": "Reset password", "sendResetLink": "Send reset link",
+    "newPassword": "New password", "updatePassword": "Update password",
+    "backToLogin": "Back to login", "emailPlaceholder": "you@email.com", "passwordPlaceholder": "••••••••",
+    "checkEmail": "Check your inbox to confirm your account.",
+    "resetSent": "If that account exists, a reset email has been sent.",
+    "passwordUpdated": "Password updated. You can log in now.",
+    "mismatch": "Passwords don't match.",
+    "tooShort": "Password must be at least 6 characters.",
+    "guestNotice": "Supabase isn't configured — you're in guest mode (local data). Add your keys to enable accounts.",
+    "continueGuest": "Continue as guest",
+    "welcome": "Welcome back!", "createdToast": "Account created — confirm via email.", "loggedOut": "Logged out.",
+    "signingIn": "Signing in…", "creating": "Creating…"
+  },
+  "dashboard": {
+    "title": "Dashboard", "subtitle": "What's hot right now — from Google Trends + Reddit, scored automatically.",
+    "hotToday": "🔥 Hot Niches Today",
+    "kpiHottest": "Hottest niche", "kpiRising": "Rising niches", "kpiRisingSub": "trending up (7d)",
+    "kpiReddit": "Reddit posts", "kpiRedditSub": "FBA buzz tracked", "kpiBoard": "On your board", "kpiBoardSub": "niches saved",
+    "redditBuzz": "Reddit buzz", "trendsLink": "Trends →"
+  },
+  "niche": {
+    "score": "Niche Score", "strong": "Strong opportunity", "worth": "Worth a look", "tough": "Tough niche", "noData": "No data",
+    "lowComp": "Low competition", "lowCompDetail": "Avg {{n}} reviews — aim for < 200",
+    "profit": "Profitable demand", "profitDetail": "Avg {{v}}/mo — aim for > $5,000",
+    "priceSpot": "Price sweet-spot", "priceDetail": "Avg {{v}} — ideal $15–$70",
+    "addBoard": "+ Add to board", "onBoard": "✓ On board",
+    "trend": "Trend", "buzz": "Buzz", "open": "Open", "vol": "vol"
+  },
+  "metrics": {
+    "asin": "ASIN — Amazon Standard Identification Number. The unique 10-character ID Amazon gives every product.",
+    "price": "The current listed selling price of the product.",
+    "bsr": "BSR — Best Sellers Rank. How well a product sells inside its category. #1 = the best seller. Lower number = more sales.",
+    "sales": "Estimated units sold per month. Calculated from the BSR using a category sales curve (an estimate, not exact Amazon data).",
+    "revenue": "Estimated gross revenue per month = estimated monthly sales × price (before fees).",
+    "reviews": "Total number of customer reviews. Lots of reviews = an established, harder-to-beat competitor.",
+    "rating": "Average star rating out of 5. A low rating with high sales can be an opportunity to make a better product.",
+    "sellers": "How many sellers offer this exact product. More sellers = more price competition on the same listing.",
+    "fba": "FBA fee — what Amazon charges to store, pack and ship one unit (Fulfilled By Amazon), plus the ~15% referral fee. Subtract it from price to gauge margin.",
+    "niche": "Niche Score (0–100) — our quick read on how attractive this set of products is to enter. Higher = easier + more profitable. Blends competition (reviews), profitability (revenue) and price sweet-spot.",
+    "volume": "Search Volume — roughly how many times per month people type this keyword into search.",
+    "competition": "Competition — how many advertisers/sellers fight over this keyword. Low = easier to rank/advertise.",
+    "cpc": "CPC — Cost Per Click. The estimated price advertisers pay for one click. High CPC = buyers with money.",
+    "trend": "Trend — whether interest in this keyword is rising or falling over recent months."
+  },
+  "search": {
+    "title": "Product Search & Analysis", "subtitle": "Search Amazon by keyword and get sales, revenue and competition estimates.",
+    "placeholder": "e.g. stainless steel water bottle", "try": "Try:",
+    "results": "{{n}} results for “{{q}}”",
+    "emptyTitle": "Start a product search", "emptyHint": "Type a product keyword above to analyze a niche.",
+    "noResults": "No products found", "noResultsHint": "Try a broader keyword.",
+    "topRevenue": "Top revenue (est. / month)"
+  },
+  "keywords": {
+    "title": "Keyword Research", "subtitle": "Enter a seed keyword to discover related terms, demand and ad cost.",
+    "placeholder": "e.g. water bottle", "emptyTitle": "Find keyword ideas", "emptyHint": "Enter a seed keyword to pull related terms with volume, CPC and competition.",
+    "related": "{{n}} related keywords", "topVolume": "Top keywords by search volume",
+    "colKeyword": "Keyword", "colVolume": "Volume", "colComp": "Competition", "colCpc": "CPC", "colTrend": "Trend"
+  },
+  "competitors": {
+    "title": "Competitor Analysis", "subtitle": "Enter an ASIN to pull its top 10 competing products and compare them.",
+    "placeholder": "e.g. B0XXXXXXXX (any ASIN works in mock mode)",
+    "emptyTitle": "Size up the competition", "emptyHint": "Paste an ASIN to see who you'd be up against and how strong they are.",
+    "top": "Top {{n}} competitors", "clickRow": "Click any row to open full details.",
+    "map": "Revenue vs Reviews (competition map)"
+  },
+  "trends": {
+    "title": "Google Trends", "subtitle": "Rising & declining shopping niches. Refreshes every 24h.",
+    "daily": "Daily trending searches", "modeled": "modeled",
+    "colKeyword": "Keyword", "colMomentum": "Momentum (7d)", "colVolume": "Volume", "colTrend": "Trend", "col30": "30-day",
+    "note": "Per-category momentum is modeled (the public Trends RSS only exposes the daily search list). Daily searches are live when Google responds.",
+    "topRising": "Top rising niches", "rangeHint": "Search-interest index (0–100) for the fastest-rising niches."
+  },
+  "bestsellers": {
+    "title": "Amazon Best Sellers", "subtitle": "Top ranked products on amazon.fr by category. Sales estimated from rank.",
+    "mockNote": "Showing realistic mock data — Amazon blocked the live scrape (common from datacenter IPs). Try refresh.",
+    "colProduct": "Product", "colPrice": "Price", "colSales": "Sales/mo", "colReviews": "Reviews", "colRating": "Rating"
+  },
+  "saved": {
+    "title": "Saved Products",
+    "subtitleLocal": "Your shortlist, stored locally in this browser.", "subtitleSync": "Your shortlist, synced to your account.",
+    "countLocal": "{{n}} product(s) · localStorage", "countSync": "{{n}} product(s) · synced",
+    "emptyTitle": "No saved products yet", "emptyHint": "Hit “Save” on any product to build your shortlist.",
+    "shortlist": "Shortlist"
+  },
+  "kanban": {
+    "title": "Research Board",
+    "subtitleLocal": "Drag niches across stages. Saved locally.", "subtitleSync": "Drag niches across stages. Synced to your account.",
+    "addPlaceholder": "Add a niche to analyze…", "dropHere": "Drop here", "addNotes": "+ add notes", "notes": "Notes…",
+    "syncing": "Syncing…",
+    "col": { "analyser": "To analyze", "encours": "In progress", "validee": "Validated", "abandonnee": "Dropped" }
+  },
+  "assistant": {
+    "title": "AI Assistant", "subtitle": "A local, private assistant (Ollama) for factual FBA questions — definitions and metric explanations only.",
+    "notRunning": "Ollama is not running", "enableIntro": "The assistant works fully offline on your machine. To enable it:",
+    "step2": "Pull a model →", "step3": "Allow this app →", "step4": "Reload this page.",
+    "untilThen": "Until then, use the built-in glossary on the right.",
+    "kb": "Offline knowledge base", "connected": "Connected", "private": "localhost:11434 · private",
+    "ask": "Ask a factual FBA question.", "thinking": "Thinking…", "inputPlaceholder": "Ask about a metric…",
+    "errStopped": "Ollama stopped responding. Is it still running?", "errGeneric": "The assistant could not answer. Try again.",
+    "suggestions": ["What is BSR?", "Explain FBA fees", "What does CPC mean?", "Summarize this product listing"]
+  },
+  "toast": {
+    "saved": "Product saved", "removed": "Product removed", "exported": "CSV exported", "cleared": "List cleared",
+    "boardAdded": "Added to board", "boardExists": "Already on board", "boardCleared": "Board cleared", "cardRemoved": "Card removed",
+    "langChanged": "Language: English", "syncError": "Sync failed — try again."
+  },
+  "errors": {
+    "network": "Network/CORS error — the API blocked the browser request. Mock mode avoids this.",
+    "auth": "Authentication failed — check your API key in .env.",
+    "rate": "Rate limit reached — the free API tier is exhausted. Try again later or use mock mode.",
+    "generic": "Something went wrong.",
+    "invalidLogin": "Invalid email or password.",
+    "emailInUse": "This email is already in use."
+  }
+}

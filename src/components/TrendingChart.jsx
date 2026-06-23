@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts'
 import { chartTooltipStyle } from './ProductDetailModal'
 import { InfoTip } from './ui'
@@ -7,6 +8,7 @@ const LINE_COLORS = ['#1b4fd8', '#16a34a', '#d97706', '#7c3aed', '#0ea5e9']
 
 // trends: { categories: { Cat: [{keyword, series:[{day,value}], momentum}] } }
 export default function TrendingChart({ trends }) {
+  const { t } = useTranslation()
   const [range, setRange] = useState(30)
 
   const { merged, keys } = useMemo(() => {
@@ -26,8 +28,8 @@ export default function TrendingChart({ trends }) {
     <div className="card p-5">
       <div className="mb-3 flex items-center justify-between">
         <h2 className="flex items-center gap-1.5 text-sm font-semibold uppercase tracking-wide text-slate-500">
-          Top rising niches
-          <InfoTip text="Search-interest index (0–100) for the fastest-rising niches. Daily searches are live; the curves are modeled trend lines." />
+          {t('trends.topRising')}
+          <InfoTip text={t('trends.rangeHint')} />
         </h2>
         <div className="flex rounded-lg border border-line bg-surface p-0.5">
           {[7, 30].map((r) => (

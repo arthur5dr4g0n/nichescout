@@ -1,14 +1,17 @@
-# 📈 NicheScout — Amazon Product Research Tool
+# 📈 MarketMax — Amazon Niche Intelligence
+
+> *Trouvez les niches qui rapportent.*
 
 A single-page web app for Amazon FBA product research, in the spirit of **Helium 10 / Jungle Scout** —
-clean light theme, deep-blue accents, data-forward layout.
+clean light theme, deep-blue accents, data-forward layout. **Bilingual 🇫🇷 / 🇬🇧** (French default).
 
 Search products, research keywords, spy on competitors, watch **Google Trends** + **Reddit buzz**,
-auto-detect **hot niches**, organise them on a **Kanban board**, and ask a **local AI assistant** —
-using **only free, keyless data sources** by default.
+auto-detect **hot niches**, organise them on a **Kanban board**, ask a **local AI assistant**, and
+**sync everything to your account** — using **only free data sources** by default.
 
-> **Works instantly with zero configuration.** It ships in **mock mode**, and free live sources
-> (Trends, Reddit, Amazon, Ollama) **switch on automatically when they respond**.
+> **Works instantly with zero configuration.** It ships in **mock mode** + **guest mode** (no login
+> needed), and free live sources (Trends, Reddit, Amazon, Ollama) **switch on automatically when they
+> respond**. Add Supabase keys to unlock accounts + cross-device sync.
 
 ![mode](https://img.shields.io/badge/default-mock%20%2B%20auto--live-1b4fd8) ![stack](https://img.shields.io/badge/React-18-1b4fd8) ![css](https://img.shields.io/badge/TailwindCSS-3-38bdf8) ![keys](https://img.shields.io/badge/API%20keys-not%20required-16a34a)
 
@@ -39,9 +42,13 @@ Build for production with `npm run build`, preview with `npm run preview`.
 | **Competitors** | ASIN → top 10 competitors compared side-by-side + revenue-vs-reviews chart. |
 | **Trends** | Google Trends: live daily searches + per-category rising/declining niches (7/30-day curves). |
 | **Best Sellers** | Amazon.fr best sellers scraped by category (High-Tech, Cuisine, Sport, Beauté, Animalerie). |
-| **Saved** | Shortlist saved to localStorage, CSV export. |
-| **Research Board** | Kanban: 🔍 À analyser / ⚡ En cours / ✅ Validée / ❌ Abandonnée — drag & drop, notes, CSV export. |
+| **Saved** | Shortlist synced to your account (or localStorage in guest mode), CSV export. |
+| **Research Board** | Kanban: 🔍 À analyser / ⚡ En cours / ✅ Validée / ❌ Abandonnée — drag & drop, notes, synced, CSV export. |
 | **AI Assistant** | Local Ollama chat, restricted to **factual** FBA questions (definitions only). |
+| **Accounts** | Signup / login / logout, email confirmation, "remember me", password reset (via Supabase). |
+
+Plus: **🇫🇷/🇬🇧 language toggle** (i18next, French default, saved to localStorage), **toast notifications**,
+loading skeletons, offline indicator, and (i) tooltips on every metric — all translated.
 
 Plus everywhere: **(i) tooltips** on every metric, loading skeletons, human-readable error states,
 a **Niche Score (0–100)** colour-coded red/orange/green, an **offline indicator**, and **mobile responsive** layout.
@@ -95,6 +102,36 @@ a **competition proxy** (25%) into a 0–100 score per niche, colour-coded, with
 One click sends a niche to your Kanban board.
 
 ---
+
+## 👤 Setup Supabase (5 min) — accounts + sync
+
+Optional. Without it the app runs in **guest mode** (no login, data in localStorage). With it you get
+signup/login, a protected dashboard, and **Saved products + Kanban synced across devices**.
+
+1. Create a free project at **https://supabase.com**.
+2. **Project Settings → API** → copy the **Project URL** and the **anon public** key into `.env`:
+   ```env
+   VITE_SUPABASE_URL=https://xxxx.supabase.co
+   VITE_SUPABASE_ANON_KEY=eyJhbGciOi...
+   ```
+3. **SQL Editor** → run this once (one row per user, row-level security on):
+   ```sql
+   create table public.user_data (
+     user_id uuid primary key references auth.users(id) on delete cascade,
+     saved jsonb default '[]'::jsonb,
+     board jsonb default '{}'::jsonb,
+     updated_at timestamptz default now()
+   );
+   alter table public.user_data enable row level security;
+   create policy "own row" on public.user_data
+     for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
+   ```
+4. **Authentication → Providers → Email**: keep "Confirm email" on (sends the confirmation email automatically).
+   Add your site URL under **Authentication → URL Configuration** so reset/confirm links work.
+5. Restart `npm start`. You'll now see Login / Signup instead of guest mode.
+
+> On Cloudflare, add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` as **environment variables**
+> (Pages → Settings → Environment variables) and redeploy.
 
 ## 💳 Optional paid APIs (Search / Keywords)
 
@@ -154,6 +191,15 @@ deployed site keeps real Trends / Reddit / Amazon data — no separate backend n
    - **Build output directory:** `dist`
    - Node version is pinned to 20 via `.nvmrc`.
 4. **Save and Deploy.** Every `git push` auto-rebuilds.
+5. (Optional) Add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` env vars to enable accounts online.
+
+**Redeploy after changes:**
+```bash
+git add -A
+git commit -m "your change"
+git push
+```
+Cloudflare Pages rebuilds automatically on push to `main`.
 
 > ⚠️ From Cloudflare's datacenter IPs, Reddit and Amazon block scraping more aggressively than your
 > home IP, so online they'll often show **mock** data (Google Trends usually stays live). The

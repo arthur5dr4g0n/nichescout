@@ -1,8 +1,10 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useAuth } from '../auth/AuthProvider'
+import { ensureRow, fetchUserData, saveColumn } from '../lib/userData'
 
 const KEY = 'nichescout.saved.v1'
 
-function load() {
+function loadLocal() {
   try {
     const raw = localStorage.getItem(KEY)
     return raw ? JSON.parse(raw) : []
@@ -11,17 +13,45 @@ function load() {
   }
 }
 
-// Saved-products list backed by localStorage, shared across the app.
+// Saved-products list. Synced to Supabase when signed in, else localStorage.
 export function useSavedProducts() {
-  const [saved, setSaved] = useState(load)
+  const { user, configured } = useAuth()
+  const cloud = configured && user && !user.guest
+  const [saved, setSaved] = useState(() => (cloud ? [] : loadLocal()))
+  const [ready, setReady] = useState(!cloud)
 
   useEffect(() => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(saved))
-    } catch {
-      /* storage full or blocked — ignore */
+    let active = true
+    if (!cloud) {
+      setSaved(loadLocal())
+      setReady(true)
+      return
     }
-  }, [saved])
+    setReady(false)
+    ;(async () => {
+      await ensureRow(user.id)
+      const d = await fetchUserData(user.id)
+      if (active) {
+        setSaved(Array.isArray(d.saved) ? d.saved : [])
+        setReady(true)
+      }
+    })()
+    return () => {
+      active = false
+    }
+  }, [cloud, user?.id])
+
+  useEffect(() => {
+    if (!ready) return
+    if (cloud) saveColumn(user.id, { saved })
+    else {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(saved))
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [saved, ready]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const has = useCallback((asin) => saved.some((p) => p.asin === asin), [saved])
 
@@ -36,5 +66,5 @@ export function useSavedProducts() {
   const remove = useCallback((asin) => setSaved((list) => list.filter((p) => p.asin !== asin)), [])
   const clear = useCallback(() => setSaved([]), [])
 
-  return { saved, has, toggle, remove, clear }
+  return { saved, has, toggle, remove, clear, syncing: cloud && !ready }
 }

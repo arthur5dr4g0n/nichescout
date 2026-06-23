@@ -1,16 +1,12 @@
 import { useMemo } from 'react'
+import { useTranslation } from 'react-i18next'
 import { RadialBarChart, RadialBar, PolarAngleAxis, ResponsiveContainer } from 'recharts'
 import { nicheScore } from '../utils/estimates'
 import { formatCurrency, formatNumber } from '../utils/format'
-import { METRICS } from '../utils/metrics'
+import { useMetrics } from '../hooks/useMetrics'
 import { InfoTip } from './ui'
 
-const COLORS = {
-  green: '#16a34a',
-  orange: '#f59e0b',
-  red: '#dc2626',
-  gray: '#94a3b8',
-}
+const COLORS = { green: '#16a34a', orange: '#f59e0b', red: '#dc2626', gray: '#94a3b8' }
 
 function Criterion({ label, ok, detail, score }) {
   return (
@@ -28,18 +24,20 @@ function Criterion({ label, ok, detail, score }) {
 }
 
 export default function NicheScoreCard({ products }) {
+  const { t } = useTranslation()
+  const METRICS = useMetrics()
   const result = useMemo(() => nicheScore(products), [products])
-  const { score, color, label, breakdown } = result
+  const { score, color, breakdown } = result
   const fill = COLORS[color] || COLORS.gray
-
   if (!breakdown) return null
 
+  const label = color === 'green' ? t('niche.strong') : color === 'orange' ? t('niche.worth') : t('niche.tough')
   const data = [{ name: 'score', value: score, fill }]
 
   return (
     <div className="card p-5">
       <div className="mb-1 flex items-center gap-1.5">
-        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">Niche Score</h2>
+        <h2 className="text-sm font-semibold uppercase tracking-wide text-slate-500">{t('niche.score')}</h2>
         <InfoTip text={METRICS.niche} />
       </div>
 
@@ -52,34 +50,15 @@ export default function NicheScoreCard({ products }) {
             </RadialBarChart>
           </ResponsiveContainer>
           <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center">
-            <span className="text-3xl font-bold" style={{ color: fill }}>
-              {score}
-            </span>
-            <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: fill }}>
-              {label}
-            </span>
+            <span className="text-3xl font-bold" style={{ color: fill }}>{score}</span>
+            <span className="text-[11px] font-semibold uppercase tracking-wide" style={{ color: fill }}>{label}</span>
           </div>
         </div>
 
         <div className="flex w-full flex-col gap-2">
-          <Criterion
-            label="Low competition"
-            detail={`Avg ${formatNumber(breakdown.avgReviews)} reviews — aim for < 200`}
-            ok={breakdown.avgReviews < 200}
-            score={breakdown.reviewScore}
-          />
-          <Criterion
-            label="Profitable demand"
-            detail={`Avg ${formatCurrency(breakdown.avgRevenue)}/mo — aim for > $5,000`}
-            ok={breakdown.avgRevenue > 5000}
-            score={breakdown.revenueScore}
-          />
-          <Criterion
-            label="Price sweet-spot"
-            detail={`Avg ${formatCurrency(breakdown.avgPrice)} — ideal $15–$70`}
-            ok={breakdown.avgPrice >= 15 && breakdown.avgPrice <= 70}
-            score={breakdown.priceScore}
-          />
+          <Criterion label={t('niche.lowComp')} detail={t('niche.lowCompDetail', { n: formatNumber(breakdown.avgReviews) })} ok={breakdown.avgReviews < 200} score={breakdown.reviewScore} />
+          <Criterion label={t('niche.profit')} detail={t('niche.profitDetail', { v: formatCurrency(breakdown.avgRevenue) })} ok={breakdown.avgRevenue > 5000} score={breakdown.revenueScore} />
+          <Criterion label={t('niche.priceSpot')} detail={t('niche.priceDetail', { v: formatCurrency(breakdown.avgPrice) })} ok={breakdown.avgPrice >= 15 && breakdown.avgPrice <= 70} score={breakdown.priceScore} />
         </div>
       </div>
     </div>

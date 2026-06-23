@@ -1,14 +1,17 @@
 import { useCallback, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { fetchBestsellers, BS_CATEGORIES } from '../api/bestsellers'
 import { useCachedResource } from '../hooks/useCachedResource'
 import { useOnline } from '../hooks/useOnline'
+import { useMetrics } from '../hooks/useMetrics'
 import { TTL } from '../utils/cache'
 import { formatCurrency, formatCompact, formatNumber, formatRank } from '../utils/format'
-import { METRICS } from '../utils/metrics'
 import { SkeletonTable, InfoTip, RatingStars } from '../components/ui'
 import LastUpdated from '../components/LastUpdated'
 
 export default function BestSellersPage() {
+  const { t } = useTranslation()
+  const METRICS = useMetrics()
   const [cat, setCat] = useState('electronics')
   const online = useOnline()
   const fetcher = useCallback(() => fetchBestsellers(cat), [cat])
@@ -18,23 +21,15 @@ export default function BestSellersPage() {
     <div className="space-y-5">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h1 className="text-xl font-bold text-slate-900">Amazon Best Sellers</h1>
-          <p className="mt-1 text-sm text-slate-500">Top ranked products on amazon.fr by category. Sales estimated from rank.</p>
+          <h1 className="text-xl font-bold text-slate-900">{t('bestsellers.title')}</h1>
+          <p className="mt-1 text-sm text-slate-500">{t('bestsellers.subtitle')}</p>
         </div>
         <LastUpdated source={source} updatedAt={updatedAt} loading={loading} onRefresh={refresh} online={online} />
       </div>
 
       <div className="flex flex-wrap gap-2">
         {BS_CATEGORIES.map((c) => (
-          <button
-            key={c.id}
-            onClick={() => setCat(c.id)}
-            className={`chip border px-3 py-1.5 ${
-              cat === c.id ? 'border-brand bg-brand-tint text-brand' : 'border-line bg-surface text-slate-600 hover:border-brand/40'
-            }`}
-          >
-            {c.label}
-          </button>
+          <button key={c.id} onClick={() => setCat(c.id)} className={`chip border px-3 py-1.5 ${cat === c.id ? 'border-brand bg-brand-tint text-brand' : 'border-line bg-surface text-slate-600 hover:border-brand/40'}`}>{c.label}</button>
         ))}
       </div>
 
@@ -46,12 +41,12 @@ export default function BestSellersPage() {
             <thead>
               <tr className="border-b border-line text-left text-[11px] uppercase tracking-wide text-slate-500">
                 <th className="px-4 py-3">#</th>
-                <th className="px-4 py-3">Product</th>
-                <th className="px-4 py-3 text-right">Price</th>
+                <th className="px-4 py-3">{t('bestsellers.colProduct')}</th>
+                <th className="px-4 py-3 text-right">{t('bestsellers.colPrice')}</th>
                 <th className="px-4 py-3 text-right"><span className="inline-flex items-center gap-1">BSR <InfoTip text={METRICS.bsr} /></span></th>
-                <th className="px-4 py-3 text-right"><span className="inline-flex items-center gap-1">Sales/mo <InfoTip text={METRICS.sales} /></span></th>
-                <th className="px-4 py-3 text-right">Reviews</th>
-                <th className="px-4 py-3 text-right">Rating</th>
+                <th className="px-4 py-3 text-right"><span className="inline-flex items-center gap-1">{t('bestsellers.colSales')} <InfoTip text={METRICS.sales} /></span></th>
+                <th className="px-4 py-3 text-right">{t('bestsellers.colReviews')}</th>
+                <th className="px-4 py-3 text-right">{t('bestsellers.colRating')}</th>
               </tr>
             </thead>
             <tbody>
@@ -75,11 +70,7 @@ export default function BestSellersPage() {
           </table>
         </div>
       )}
-      {source === 'mock' && (
-        <p className="text-xs text-slate-400">
-          Showing realistic mock data — Amazon blocked the live scrape (common from datacenter IPs / without a browser). Try refresh.
-        </p>
-      )}
+      {source === 'mock' && <p className="text-xs text-slate-400">{t('bestsellers.mockNote')}</p>}
     </div>
   )
 }

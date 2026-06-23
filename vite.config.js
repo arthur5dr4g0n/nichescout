@@ -7,7 +7,8 @@ import { researchProxy } from './vite.proxy.js'
 // Access them in code via import.meta.env.REACT_APP_*
 export default defineConfig({
   plugins: [react(), researchProxy()],
-  envPrefix: 'REACT_APP_',
+  // Expose both VITE_* (Supabase) and REACT_APP_* (legacy flags) to the app.
+  envPrefix: ['VITE_', 'REACT_APP_'],
   server: {
     port: 5173,
     open: false,

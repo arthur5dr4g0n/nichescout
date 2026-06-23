@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { InfoIcon, StarIcon, TrendUpIcon, TrendDownIcon, TrendFlatIcon, SearchIcon } from './icons'
 
 // --- Tooltip / metric explainer ---------------------------------------------
@@ -54,14 +55,19 @@ export function Badge({ children, tone = 'brand', className = '' }) {
 }
 
 export function CompetitionBadge({ level }) {
+  const { i18n } = useTranslation()
+  const fr = i18n.language?.startsWith('fr')
   const tone = level === 'Low' ? 'green' : level === 'High' ? 'red' : 'orange'
-  return <Badge tone={tone}>{level}</Badge>
+  const label = level === 'Low' ? (fr ? 'Faible' : 'Low') : level === 'High' ? (fr ? 'Élevée' : 'High') : (fr ? 'Moyenne' : 'Medium')
+  return <Badge tone={tone}>{label}</Badge>
 }
 
 export function TrendBadge({ dir }) {
-  if (dir === 'up') return <span className="inline-flex items-center gap-1 text-green-600"><TrendUpIcon size={16} /> Rising</span>
-  if (dir === 'down') return <span className="inline-flex items-center gap-1 text-red-600"><TrendDownIcon size={16} /> Falling</span>
-  return <span className="inline-flex items-center gap-1 text-slate-500"><TrendFlatIcon size={16} /> Flat</span>
+  const { i18n } = useTranslation()
+  const fr = i18n.language?.startsWith('fr')
+  if (dir === 'up') return <span className="inline-flex items-center gap-1 text-green-600"><TrendUpIcon size={16} /> {fr ? 'En hausse' : 'Rising'}</span>
+  if (dir === 'down') return <span className="inline-flex items-center gap-1 text-red-600"><TrendDownIcon size={16} /> {fr ? 'En baisse' : 'Falling'}</span>
+  return <span className="inline-flex items-center gap-1 text-slate-500"><TrendFlatIcon size={16} /> {fr ? 'Stable' : 'Flat'}</span>
 }
 
 export function RatingStars({ value = 0 }) {
@@ -149,6 +155,7 @@ export function EmptyState({ icon = '🔍', title, hint }) {
 
 // --- Search bar --------------------------------------------------------------
 export function SearchBar({ value, onChange, onSubmit, placeholder, loading, button = 'Search' }) {
+  const { t } = useTranslation()
   return (
     <form
       onSubmit={(e) => {
@@ -167,7 +174,7 @@ export function SearchBar({ value, onChange, onSubmit, placeholder, loading, but
         />
       </div>
       <button type="submit" className="btn-primary sm:w-auto" disabled={loading || !value.trim()}>
-        {loading ? 'Loading…' : button}
+        {loading ? t('common.loading') : button}
       </button>
     </form>
   )

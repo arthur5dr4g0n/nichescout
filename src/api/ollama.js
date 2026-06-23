@@ -2,10 +2,16 @@
 // dev server to avoid browser CORS. Restricted to factual FBA questions.
 import { tryLive } from './live'
 
-export const OLLAMA_SYSTEM_PROMPT = `You are a factual Amazon FBA assistant.
+export const OLLAMA_SYSTEM_PROMPTS = {
+  fr: `Tu es un assistant Amazon FBA factuel.
+Ne jamais estimer des ventes ou prédire la rentabilité.
+Expliquer uniquement les métriques et définitions.
+Si incertain, dire explicitement : je ne sais pas.`,
+  en: `You are a factual Amazon FBA assistant.
 Never estimate sales or predict profitability.
 Only explain metrics and definitions.
-If unsure, say explicitly: I don't know.`
+If unsure, say explicitly: I don't know.`,
+}
 
 const PREFERRED = ['mistral', 'llama3', 'llama3.1']
 
@@ -28,7 +34,8 @@ export function pickModel(models = []) {
 }
 
 // messages: [{ role:'user'|'assistant', content }]
-export async function askOllama(messages, model) {
+export async function askOllama(messages, model, lang = 'fr') {
+  const system = OLLAMA_SYSTEM_PROMPTS[lang] || OLLAMA_SYSTEM_PROMPTS.fr
   const res = await fetch('/api/ollama', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -36,7 +43,7 @@ export async function askOllama(messages, model) {
       model: model || 'mistral',
       stream: false,
       options: { temperature: 0.2 },
-      messages: [{ role: 'system', content: OLLAMA_SYSTEM_PROMPT }, ...messages],
+      messages: [{ role: 'system', content: system }, ...messages],
     }),
   })
   if (!res.ok) {

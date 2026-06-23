@@ -29,11 +29,11 @@ export function formatRank(n) {
   return '#' + new Intl.NumberFormat('en-US').format(n)
 }
 
-export function timeAgo(ts) {
-  if (!ts) return '—'
+export function timeAgo(ts, t) {
+  if (!ts || !Number.isFinite(ts)) return '—'
   const s = Math.max(0, Math.floor((Date.now() - ts) / 1000))
-  if (s < 45) return 'just now'
-  if (s < 3600) return `${Math.floor(s / 60)}m ago`
-  if (s < 86400) return `${Math.floor(s / 3600)}h ago`
-  return `${Math.floor(s / 86400)}d ago`
+  if (s < 45) return t ? t('common.justNow') : 'just now'
+  if (s < 3600) return t ? t('common.minAgo', { n: Math.floor(s / 60) }) : `${Math.floor(s / 60)}m ago`
+  if (s < 86400) return t ? t('common.hAgo', { n: Math.floor(s / 3600) }) : `${Math.floor(s / 3600)}h ago`
+  return t ? t('common.dAgo', { n: Math.floor(s / 86400) }) : `${Math.floor(s / 86400)}d ago`
 }

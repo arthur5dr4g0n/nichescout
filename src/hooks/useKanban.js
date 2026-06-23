@@ -1,17 +1,20 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useAuth } from '../auth/AuthProvider'
+import { ensureRow, fetchUserData, saveColumn } from '../lib/userData'
 
 const KEY = 'nichescout.kanban.v1'
 
+// id stays stable; labels are translated in the UI via kanban.col.<id>.
 export const COLUMNS = [
-  { id: 'analyser', label: 'À analyser', emoji: '🔍' },
-  { id: 'encours', label: 'En cours', emoji: '⚡' },
-  { id: 'validee', label: 'Validée', emoji: '✅' },
-  { id: 'abandonnee', label: 'Abandonnée', emoji: '❌' },
+  { id: 'analyser', emoji: '🔍' },
+  { id: 'encours', emoji: '⚡' },
+  { id: 'validee', emoji: '✅' },
+  { id: 'abandonnee', emoji: '❌' },
 ]
 
 const empty = () => ({ analyser: [], encours: [], validee: [], abandonnee: [] })
 
-function load() {
+function loadLocal() {
   try {
     const raw = localStorage.getItem(KEY)
     return raw ? { ...empty(), ...JSON.parse(raw) } : empty()
@@ -21,15 +24,45 @@ function load() {
 }
 
 export function useKanban() {
-  const [board, setBoard] = useState(load)
+  const { user, configured } = useAuth()
+  const cloud = configured && user && !user.guest
+  const [board, setBoard] = useState(() => (cloud ? empty() : loadLocal()))
+  const [ready, setReady] = useState(!cloud)
+  const firstWrite = useRef(true)
 
   useEffect(() => {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(board))
-    } catch {
-      /* ignore */
+    let active = true
+    if (!cloud) {
+      setBoard(loadLocal())
+      setReady(true)
+      return
     }
-  }, [board])
+    setReady(false)
+    firstWrite.current = true
+    ;(async () => {
+      await ensureRow(user.id)
+      const d = await fetchUserData(user.id)
+      if (active) {
+        setBoard(d.board && typeof d.board === 'object' ? { ...empty(), ...d.board } : empty())
+        setReady(true)
+      }
+    })()
+    return () => {
+      active = false
+    }
+  }, [cloud, user?.id])
+
+  useEffect(() => {
+    if (!ready) return
+    if (cloud) saveColumn(user.id, { board })
+    else {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(board))
+      } catch {
+        /* ignore */
+      }
+    }
+  }, [board, ready]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const addCard = useCallback((card, col = 'analyser') => {
     setBoard((b) => {
@@ -84,11 +117,8 @@ export function useKanban() {
 
   const clear = useCallback(() => setBoard(empty()), [])
 
-  const nicheSet = useMemo(
-    () => new Set(Object.values(board).flat().map((c) => c.niche?.toLowerCase())),
-    [board],
-  )
+  const nicheSet = useMemo(() => new Set(Object.values(board).flat().map((c) => c.niche?.toLowerCase())), [board])
   const count = useMemo(() => Object.values(board).flat().length, [board])
 
-  return { board, addCard, moveCard, updateCard, removeCard, clear, nicheSet, count }
+  return { board, addCard, moveCard, updateCard, removeCard, clear, nicheSet, count, syncing: cloud && !ready }
 }

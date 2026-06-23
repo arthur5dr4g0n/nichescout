@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import { formatCompact } from '../utils/format'
 import { Badge } from './ui'
 import { TrendUpIcon, TrendDownIcon, TrendFlatIcon } from './icons'
@@ -26,6 +27,7 @@ function SignalBar({ label, value }) {
 }
 
 export default function HotNiches({ niches, onAdd, addedSet }) {
+  const { t } = useTranslation()
   if (!niches?.length) return null
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -44,13 +46,13 @@ export default function HotNiches({ niches, onAdd, addedSet }) {
 
           <div className="mb-3 flex items-center justify-between text-xs">
             <Dir dir={n.direction} momentum={n.momentum} />
-            <span className="text-slate-400">{formatCompact(n.volume)} vol</span>
+            <span className="text-slate-400">{formatCompact(n.volume)} {t('niche.vol')}</span>
           </div>
 
           <div className="mb-3 space-y-1.5">
-            <SignalBar label="Trend" value={n.signals.trend} />
-            <SignalBar label="Buzz" value={n.signals.buzz} />
-            <SignalBar label="Open" value={n.signals.competition} />
+            <SignalBar label={t('niche.trend')} value={n.signals.trend} />
+            <SignalBar label={t('niche.buzz')} value={n.signals.buzz} />
+            <SignalBar label={t('niche.open')} value={n.signals.competition} />
           </div>
 
           <ul className="mb-3 flex-1 space-y-1">
@@ -64,10 +66,10 @@ export default function HotNiches({ niches, onAdd, addedSet }) {
           {onAdd && (
             <button
               onClick={() => onAdd(n)}
-              disabled={addedSet?.has(n.niche)}
+              disabled={addedSet?.has(n.niche?.toLowerCase())}
               className="btn-ghost w-full text-xs disabled:opacity-60"
             >
-              {addedSet?.has(n.niche) ? '✓ On board' : '+ Add to Kanban'}
+              {addedSet?.has(n.niche?.toLowerCase()) ? t('niche.onBoard') : t('niche.addBoard')}
             </button>
           )}
         </div>

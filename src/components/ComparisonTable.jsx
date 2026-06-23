@@ -1,5 +1,5 @@
 import { formatCurrency, formatCompact, formatNumber, formatRank } from '../utils/format'
-import { METRICS } from '../utils/metrics'
+import { useMetrics } from '../hooks/useMetrics'
 import { InfoTip, RatingStars } from './ui'
 import { BookmarkIcon, BookmarkFilledIcon } from './icons'
 import ProductImage from './ProductImage'
@@ -16,6 +16,7 @@ function Th({ children, hint, right }) {
 }
 
 export default function ComparisonTable({ products, isSaved, onToggleSave, onOpen }) {
+  const METRICS = useMetrics()
   const maxRevenue = Math.max(...products.map((p) => p.revenue || 0))
   const minBsr = Math.min(...products.filter((p) => p.bsr).map((p) => p.bsr))
 

@@ -1,14 +1,16 @@
+import { useTranslation } from 'react-i18next'
 import { timeAgo } from '../utils/format'
 import { TrendUpIcon, ExternalIcon } from './icons'
 
 function Meta({ item, onRail }) {
+  const { t } = useTranslation()
   const muted = onRail ? 'text-rail-muted' : 'text-slate-400'
   return (
     <div className={`mt-1 flex items-center gap-2 text-[10px] ${muted}`}>
       <span>r/{item.sub}</span>
       {item.ups > 0 && <span className="inline-flex items-center gap-0.5"><TrendUpIcon size={11} /> {item.ups}</span>}
       {item.comments > 0 && <span>· {item.comments} cmt</span>}
-      <span>· {timeAgo(item.created)}</span>
+      <span>· {timeAgo(item.created, t)}</span>
     </div>
   )
 }

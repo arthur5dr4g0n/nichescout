@@ -1,0 +1,148 @@
+{
+  "brand": { "tagline": "Trouvez les niches qui rapportent" },
+  "nav": {
+    "dashboard": "Tableau de bord", "dashboardDesc": "Niches chaudes du jour",
+    "search": "Recherche", "searchDesc": "Trouver & analyser",
+    "keywords": "Mots-clés", "keywordsDesc": "Volume, CPC, tendances",
+    "competitors": "Concurrents", "competitorsDesc": "Comparer le top 10",
+    "trends": "Tendances", "trendsDesc": "En hausse & en baisse",
+    "bestsellers": "Best-sellers", "bestsellersDesc": "Top par catégorie",
+    "saved": "Sauvegardés", "savedDesc": "Ta liste",
+    "board": "Tableau de suivi", "boardDesc": "Pipeline Kanban",
+    "assistant": "Assistant IA", "assistantDesc": "Q&R FBA factuelles",
+    "buzz": "🔥 Buzz FBA"
+  },
+  "common": {
+    "refresh": "actualiser", "updatedAgo": "maj {{time}}", "updating": "mise à jour…",
+    "live": "Live", "mock": "Démo", "cached": "Cache",
+    "save": "Sauvegarder", "saved": "Sauvegardé", "remove": "Retirer",
+    "exportCsv": "Export CSV", "clearAll": "Tout effacer", "clear": "Vider",
+    "add": "Ajouter", "send": "Envoyer", "tryAgain": "Réessayer",
+    "details": "Détails", "viewOnAmazon": "Voir sur Amazon",
+    "loading": "Chargement…", "search": "Rechercher", "analyze": "Analyser", "research": "Rechercher",
+    "language": "Langue", "login": "Connexion", "logout": "Déconnexion", "guest": "Invité",
+    "justNow": "à l'instant", "minAgo": "il y a {{n}}min", "hAgo": "il y a {{n}}h", "dAgo": "il y a {{n}}j"
+  },
+  "offline": { "banner": "Tu es hors-ligne — données en cache / démo." },
+  "auth": {
+    "loginTitle": "Connexion", "signupTitle": "Créer un compte",
+    "email": "Email", "password": "Mot de passe", "confirmPassword": "Confirmer le mot de passe",
+    "rememberMe": "Se souvenir de moi", "forgotPassword": "Mot de passe oublié ?",
+    "signIn": "Se connecter", "createAccount": "Créer le compte",
+    "noAccount": "Pas de compte ?", "haveAccount": "Déjà un compte ?",
+    "signupHere": "Inscris-toi", "loginHere": "Connecte-toi",
+    "resetTitle": "Réinitialiser le mot de passe", "sendResetLink": "Envoyer le lien",
+    "newPassword": "Nouveau mot de passe", "updatePassword": "Mettre à jour",
+    "backToLogin": "Retour à la connexion", "emailPlaceholder": "toi@email.com", "passwordPlaceholder": "••••••••",
+    "checkEmail": "Vérifie ta boîte mail pour confirmer ton compte.",
+    "resetSent": "Si ce compte existe, un email de réinitialisation a été envoyé.",
+    "passwordUpdated": "Mot de passe mis à jour. Tu peux te connecter.",
+    "mismatch": "Les mots de passe ne correspondent pas.",
+    "tooShort": "Le mot de passe doit faire au moins 6 caractères.",
+    "guestNotice": "Supabase n'est pas configuré — tu es en mode invité (données locales). Ajoute tes clés pour activer les comptes.",
+    "continueGuest": "Continuer en invité",
+    "welcome": "Bon retour !", "createdToast": "Compte créé — confirme par email.", "loggedOut": "Déconnecté.",
+    "signingIn": "Connexion…", "creating": "Création…"
+  },
+  "dashboard": {
+    "title": "Tableau de bord", "subtitle": "Ce qui est chaud maintenant — Google Trends + Reddit, scoré automatiquement.",
+    "hotToday": "🔥 Niches chaudes aujourd'hui",
+    "kpiHottest": "Niche la plus chaude", "kpiRising": "Niches en hausse", "kpiRisingSub": "en hausse (7j)",
+    "kpiReddit": "Posts Reddit", "kpiRedditSub": "buzz FBA suivi", "kpiBoard": "Sur ton tableau", "kpiBoardSub": "niches sauvées",
+    "redditBuzz": "Buzz Reddit", "trendsLink": "Tendances →"
+  },
+  "niche": {
+    "score": "Niche Score", "strong": "Forte opportunité", "worth": "À regarder", "tough": "Niche difficile", "noData": "Pas de données",
+    "lowComp": "Faible concurrence", "lowCompDetail": "Moy. {{n}} avis — viser < 200",
+    "profit": "Demande rentable", "profitDetail": "Moy. {{v}}/mois — viser > 5 000 $",
+    "priceSpot": "Prix idéal", "priceDetail": "Moy. {{v}} — idéal 15–70 $",
+    "addBoard": "+ Ajouter au tableau", "onBoard": "✓ Sur le tableau",
+    "trend": "Tendance", "buzz": "Buzz", "open": "Ouvert", "vol": "vol"
+  },
+  "metrics": {
+    "asin": "ASIN — Amazon Standard Identification Number. L'identifiant unique de 10 caractères qu'Amazon donne à chaque produit.",
+    "price": "Le prix de vente affiché actuel du produit.",
+    "bsr": "BSR — Best Sellers Rank. À quel point un produit se vend dans sa catégorie. N°1 = le meilleur vendeur. Plus le nombre est petit, plus il se vend.",
+    "sales": "Unités vendues estimées par mois. Calculé depuis le BSR via une courbe de ventes par catégorie (une estimation, pas une donnée Amazon exacte).",
+    "revenue": "Chiffre d'affaires brut estimé par mois = ventes mensuelles estimées × prix (avant frais).",
+    "reviews": "Nombre total d'avis clients. Beaucoup d'avis = un concurrent établi et difficile à battre.",
+    "rating": "Note moyenne sur 5 étoiles. Une note basse avec de fortes ventes peut être une opportunité de faire mieux.",
+    "sellers": "Combien de vendeurs proposent ce produit exact. Plus de vendeurs = plus de guerre des prix sur la même fiche.",
+    "fba": "Frais FBA — ce qu'Amazon facture pour stocker, emballer et expédier une unité (Fulfilled By Amazon), plus la commission ~15%. À soustraire du prix pour juger la marge.",
+    "niche": "Niche Score (0–100) — notre lecture rapide de l'attractivité de cet ensemble de produits. Plus haut = plus facile + plus rentable. Mélange concurrence (avis), rentabilité (CA) et zone de prix idéale.",
+    "volume": "Volume de recherche — environ combien de fois par mois les gens tapent ce mot-clé.",
+    "competition": "Concurrence — combien d'annonceurs/vendeurs se battent sur ce mot-clé. Faible = plus facile à se positionner.",
+    "cpc": "CPC — Coût Par Clic. Le prix estimé que les annonceurs paient pour un clic. CPC élevé = acheteurs avec du budget.",
+    "trend": "Tendance — si l'intérêt pour ce mot-clé monte ou descend ces derniers mois."
+  },
+  "search": {
+    "title": "Recherche & analyse produit", "subtitle": "Cherche par mot-clé et obtiens ventes, CA et concurrence estimés.",
+    "placeholder": "ex. gourde inox isotherme", "try": "Essaie :",
+    "results": "{{n}} résultats pour « {{q}} »",
+    "emptyTitle": "Lance une recherche produit", "emptyHint": "Tape un mot-clé produit ci-dessus pour analyser une niche.",
+    "noResults": "Aucun produit trouvé", "noResultsHint": "Essaie un mot-clé plus large.",
+    "topRevenue": "Top CA (est. / mois)"
+  },
+  "keywords": {
+    "title": "Recherche de mots-clés", "subtitle": "Entre un mot-clé pour découvrir des termes liés, la demande et le coût pub.",
+    "placeholder": "ex. gourde", "emptyTitle": "Trouve des idées de mots-clés", "emptyHint": "Entre un mot-clé pour récupérer des termes liés avec volume, CPC et concurrence.",
+    "related": "{{n}} mots-clés liés", "topVolume": "Top mots-clés par volume",
+    "colKeyword": "Mot-clé", "colVolume": "Volume", "colComp": "Concurrence", "colCpc": "CPC", "colTrend": "Tendance"
+  },
+  "competitors": {
+    "title": "Analyse concurrentielle", "subtitle": "Entre un ASIN pour voir ses 10 concurrents et les comparer.",
+    "placeholder": "ex. B0XXXXXXXX (n'importe quel ASIN en démo)",
+    "emptyTitle": "Jauge la concurrence", "emptyHint": "Colle un ASIN pour voir à qui tu te frottes et leur force.",
+    "top": "Top {{n}} concurrents", "clickRow": "Clique une ligne pour les détails.",
+    "map": "CA vs Avis (carte de concurrence)"
+  },
+  "trends": {
+    "title": "Google Trends", "subtitle": "Niches shopping en hausse & en baisse. Maj toutes les 24h.",
+    "daily": "Recherches tendances du jour", "modeled": "modélisé",
+    "colKeyword": "Mot-clé", "colMomentum": "Momentum (7j)", "colVolume": "Volume", "colTrend": "Tendance", "col30": "30 jours",
+    "note": "Le momentum par catégorie est modélisé (le flux RSS public ne donne que la liste du jour). Les recherches du jour sont live quand Google répond.",
+    "topRising": "Top niches en hausse", "rangeHint": "Indice d'intérêt (0–100) des niches qui montent le plus vite."
+  },
+  "bestsellers": {
+    "title": "Best-sellers Amazon", "subtitle": "Top produits sur amazon.fr par catégorie. Ventes estimées selon le rang.",
+    "mockNote": "Données démo affichées — Amazon a bloqué le scrape live (fréquent depuis une IP datacenter). Essaie d'actualiser.",
+    "colProduct": "Produit", "colPrice": "Prix", "colSales": "Ventes/mois", "colReviews": "Avis", "colRating": "Note"
+  },
+  "saved": {
+    "title": "Produits sauvegardés",
+    "subtitleLocal": "Ta liste, stockée localement dans ce navigateur.", "subtitleSync": "Ta liste, synchronisée sur ton compte.",
+    "countLocal": "{{n}} produit(s) · localStorage", "countSync": "{{n}} produit(s) · synchronisé",
+    "emptyTitle": "Aucun produit sauvegardé", "emptyHint": "Clique « Sauvegarder » sur un produit pour construire ta liste.",
+    "shortlist": "Liste courte"
+  },
+  "kanban": {
+    "title": "Tableau de suivi",
+    "subtitleLocal": "Glisse les niches entre les étapes. Sauvé localement.", "subtitleSync": "Glisse les niches entre les étapes. Synchronisé sur ton compte.",
+    "addPlaceholder": "Ajouter une niche à analyser…", "dropHere": "Déposer ici", "addNotes": "+ ajouter des notes", "notes": "Notes…",
+    "syncing": "Synchronisation…",
+    "col": { "analyser": "À analyser", "encours": "En cours", "validee": "Validée", "abandonnee": "Abandonnée" }
+  },
+  "assistant": {
+    "title": "Assistant IA", "subtitle": "Un assistant local et privé (Ollama) pour des questions FBA factuelles — définitions et métriques uniquement.",
+    "notRunning": "Ollama ne tourne pas", "enableIntro": "L'assistant marche 100% hors-ligne sur ta machine. Pour l'activer :",
+    "step2": "Télécharge un modèle →", "step3": "Autorise l'app →", "step4": "Recharge la page.",
+    "untilThen": "En attendant, utilise le glossaire intégré à droite.",
+    "kb": "Base de connaissances hors-ligne", "connected": "Connecté", "private": "localhost:11434 · privé",
+    "ask": "Pose une question FBA factuelle.", "thinking": "Réflexion…", "inputPlaceholder": "Pose une question sur une métrique…",
+    "errStopped": "Ollama ne répond plus. Toujours lancé ?", "errGeneric": "L'assistant n'a pas pu répondre. Réessaie.",
+    "suggestions": ["C'est quoi le BSR ?", "Explique les frais FBA", "C'est quoi le CPC ?", "Résume cette fiche produit"]
+  },
+  "toast": {
+    "saved": "Produit sauvegardé", "removed": "Produit retiré", "exported": "CSV exporté", "cleared": "Liste vidée",
+    "boardAdded": "Ajouté au tableau", "boardExists": "Déjà sur le tableau", "boardCleared": "Tableau vidé", "cardRemoved": "Carte supprimée",
+    "langChanged": "Langue : Français", "syncError": "Échec de synchronisation — réessaie."
+  },
+  "errors": {
+    "network": "Erreur réseau/CORS — l'API a bloqué la requête du navigateur. Le mode démo évite ça.",
+    "auth": "Authentification échouée — vérifie ta clé API dans .env.",
+    "rate": "Limite atteinte — quota gratuit épuisé. Réessaie plus tard ou passe en démo.",
+    "generic": "Un problème est survenu.",
+    "invalidLogin": "Email ou mot de passe incorrect.",
+    "emailInUse": "Cet email est déjà utilisé."
+  }
+}
