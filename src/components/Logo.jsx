@@ -8,7 +8,7 @@ export default function Logo({ size = 'md', tagline = false, onDark = false }) {
   return (
     <div className="flex items-center gap-2.5">
       <img
-        src="/marketmax-logo.png"
+        src="/logo192.png"
         alt="MarketMax"
         className={`${tile} shrink-0 rounded-xl object-cover shadow-lg shadow-brand/30`}
       />
