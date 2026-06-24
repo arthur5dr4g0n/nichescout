@@ -45,7 +45,10 @@ Build for production with `npm run build`, preview with `npm run preview`.
 | **Saved** | Shortlist synced to your account (or localStorage in guest mode), CSV export. |
 | **Research Board** | Kanban: 🔍 À analyser / ⚡ En cours / ✅ Validée / ❌ Abandonnée — drag & drop, notes, synced, CSV export. |
 | **AI Assistant** | Local Ollama chat, restricted to **factual** FBA questions (definitions only). |
-| **Accounts** | Signup / login / logout, email confirmation, "remember me", password reset (via Supabase). |
+| **Accounts** | Signup / login / logout + **Google OAuth**, email confirmation, "remember me", password reset (via Supabase). |
+| **Profile** (`/profile`) | Edit name + avatar, change password (old-password check), plan + expiry, last-10 activity, danger zone (delete account / logout all devices). |
+| **Audit trail** | `activity_logs` records login, logout, role_change, ban, delete_account + IP. |
+| **Legal** | `/cgu`, `/confidentialite` (GDPR), `/cookies` + cookie-consent banner. Roles: `user` / `admin` / `super_admin` (1st user). |
 
 Plus: **🇫🇷/🇬🇧 language toggle** (i18next, French default, saved to localStorage), **toast notifications**,
 loading skeletons, offline indicator, and (i) tooltips on every metric — all translated.
@@ -103,35 +106,33 @@ One click sends a niche to your Kanban board.
 
 ---
 
-## 👤 Setup Supabase (5 min) — accounts + sync
+## 👤 Setup Supabase (5 min) — accounts, sync, audit
 
 Optional. Without it the app runs in **guest mode** (no login, data in localStorage). With it you get
-signup/login, a protected dashboard, and **Saved products + Kanban synced across devices**.
+signup/login (+ **Google OAuth**), a protected dashboard, a **profile page**, an **audit trail**, and
+**Saved products + Kanban synced across devices**.
 
 1. Create a free project at **https://supabase.com**.
-2. **Project Settings → API** → copy the **Project URL** and the **anon public** key into `.env`:
+2. **Project Settings → API** → copy the **Project URL** + **anon public** key into `.env`:
    ```env
    VITE_SUPABASE_URL=https://xxxx.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJhbGciOi...
    ```
-3. **SQL Editor** → run this once (one row per user, row-level security on):
-   ```sql
-   create table public.user_data (
-     user_id uuid primary key references auth.users(id) on delete cascade,
-     saved jsonb default '[]'::jsonb,
-     board jsonb default '{}'::jsonb,
-     updated_at timestamptz default now()
-   );
-   alter table public.user_data enable row level security;
-   create policy "own row" on public.user_data
-     for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-   ```
-4. **Authentication → Providers → Email**: keep "Confirm email" on (sends the confirmation email automatically).
-   Add your site URL under **Authentication → URL Configuration** so reset/confirm links work.
-5. Restart `npm start`. You'll now see Login / Signup instead of guest mode.
+3. **SQL Editor → New query** → paste & run **[`supabase/schema.sql`](supabase/schema.sql)** (in this repo).
+   It creates `profiles`, `user_data`, `activity_logs`, row-level security, the self-service
+   **delete-account** function, and a trigger that makes the **first registered user a `super_admin`**.
+4. **Authentication → Providers → Email**: keep **Confirm email** on (auto-sends the confirmation email).
+   Under **URL Configuration**, add your site URLs (localhost + your `.pages.dev`) so confirm/reset links work.
+5. **(Optional) Google login** — Authentication → Providers → **Google** → enable. Create OAuth credentials
+   in [Google Cloud Console](https://console.cloud.google.com) (OAuth consent screen + Web client), set the
+   callback URL that Supabase shows you, and paste **Client ID + Secret** into Supabase. *No frontend keys needed.*
+6. **(Optional) Avatar upload** — Storage → create a **public** bucket named `avatars`.
+7. **(Optional) Email templates** — Authentication → Email Templates → brand *Confirm signup* and
+   *Reset password* with the MarketMax logo + a clear button.
+8. Restart `npm start`. You'll now see Login / Signup instead of guest mode.
 
-> On Cloudflare, add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` as **environment variables**
-> (Pages → Settings → Environment variables) and redeploy.
+> **On Cloudflare:** add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` under **Pages → Settings →
+> Environment variables**, add your `*.pages.dev` URL to Supabase **URL Configuration**, then redeploy.
 
 ## 💳 Optional paid APIs (Search / Keywords)
 

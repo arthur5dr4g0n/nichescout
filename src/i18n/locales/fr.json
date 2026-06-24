@@ -10,6 +10,7 @@
     "saved": "Sauvegardés", "savedDesc": "Ta liste",
     "board": "Tableau de suivi", "boardDesc": "Pipeline Kanban",
     "assistant": "Assistant IA", "assistantDesc": "Q&R FBA factuelles",
+    "profile": "Profil",
     "buzz": "🔥 Buzz FBA"
   },
   "common": {
@@ -42,7 +43,8 @@
     "guestNotice": "Supabase n'est pas configuré — tu es en mode invité (données locales). Ajoute tes clés pour activer les comptes.",
     "continueGuest": "Continuer en invité",
     "welcome": "Bon retour !", "createdToast": "Compte créé — confirme par email.", "loggedOut": "Déconnecté.",
-    "signingIn": "Connexion…", "creating": "Création…"
+    "signingIn": "Connexion…", "creating": "Création…",
+    "google": "Continuer avec Google", "or": "ou"
   },
   "dashboard": {
     "title": "Tableau de bord", "subtitle": "Ce qui est chaud maintenant — Google Trends + Reddit, scoré automatiquement.",
@@ -144,5 +146,51 @@
     "generic": "Un problème est survenu.",
     "invalidLogin": "Email ou mot de passe incorrect.",
     "emailInUse": "Cet email est déjà utilisé."
+  },
+  "profile": {
+    "title": "Mon profil",
+    "guestTitle": "Profil indisponible",
+    "guestNotice": "Configure Supabase et connecte-toi pour gérer ton profil.",
+    "identity": "Identité",
+    "fullName": "Nom complet",
+    "avatarUrl": "URL de l'avatar",
+    "uploadAvatar": "Importer une image",
+    "uploadOk": "Avatar importé",
+    "uploadFail": "Échec de l'import (crée un bucket public « avatars » dans Supabase Storage).",
+    "save": "Enregistrer",
+    "saved": "Profil mis à jour",
+    "plan": "Abonnement",
+    "expires": "Expire le {{date}}",
+    "noExpiry": "Plan gratuit — sans expiration.",
+    "security": "Sécurité",
+    "oldPassword": "Ancien mot de passe",
+    "newPassword": "Nouveau mot de passe",
+    "changePassword": "Changer le mot de passe",
+    "passwordChanged": "Mot de passe changé",
+    "wrongOld": "Ancien mot de passe incorrect.",
+    "activity": "Activité récente",
+    "noActivity": "Aucune activité.",
+    "danger": "Zone de danger",
+    "logoutAll": "Déconnecter tous les appareils",
+    "logoutAllDesc": "Termine toutes tes sessions actives partout.",
+    "loggedOutAll": "Déconnecté partout.",
+    "deleteAccount": "Supprimer mon compte",
+    "deleteWarn": "Action irréversible : ton compte et toutes tes données seront supprimés.",
+    "typeToConfirm": "Tape « {{word}} » pour confirmer.",
+    "confirmDelete": "Supprimer définitivement",
+    "deleted": "Compte supprimé."
+  },
+  "legal": {
+    "updated": "Dernière mise à jour : {{date}}",
+    "cgu": "CGU", "privacy": "Confidentialité", "cookies": "Cookies", "backApp": "← Retour à l'app"
+  },
+  "cookies": {
+    "banner": "On utilise le stockage local pour faire fonctionner le site (langue, session). Pas de pub, pas de traceurs.",
+    "learn": "En savoir plus", "accept": "Accepter", "decline": "Refuser"
+  },
+  "activity": {
+    "login": "Connexion", "logout": "Déconnexion", "signup": "Inscription",
+    "profile_update": "Profil modifié", "password_change": "Mot de passe changé",
+    "role_change": "Rôle modifié", "ban": "Bannissement", "delete_account": "Suppression de compte"
   }
 }

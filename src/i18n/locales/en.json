@@ -10,6 +10,7 @@
     "saved": "Saved", "savedDesc": "Your shortlist",
     "board": "Research Board", "boardDesc": "Kanban pipeline",
     "assistant": "AI Assistant", "assistantDesc": "Factual FBA Q&A",
+    "profile": "Profile",
     "buzz": "🔥 FBA Buzz"
   },
   "common": {
@@ -42,7 +43,8 @@
     "guestNotice": "Supabase isn't configured — you're in guest mode (local data). Add your keys to enable accounts.",
     "continueGuest": "Continue as guest",
     "welcome": "Welcome back!", "createdToast": "Account created — confirm via email.", "loggedOut": "Logged out.",
-    "signingIn": "Signing in…", "creating": "Creating…"
+    "signingIn": "Signing in…", "creating": "Creating…",
+    "google": "Continue with Google", "or": "or"
   },
   "dashboard": {
     "title": "Dashboard", "subtitle": "What's hot right now — from Google Trends + Reddit, scored automatically.",
@@ -144,5 +146,51 @@
     "generic": "Something went wrong.",
     "invalidLogin": "Invalid email or password.",
     "emailInUse": "This email is already in use."
+  },
+  "profile": {
+    "title": "My profile",
+    "guestTitle": "Profile unavailable",
+    "guestNotice": "Configure Supabase and log in to manage your profile.",
+    "identity": "Identity",
+    "fullName": "Full name",
+    "avatarUrl": "Avatar URL",
+    "uploadAvatar": "Upload image",
+    "uploadOk": "Avatar uploaded",
+    "uploadFail": "Upload failed (create a public 'avatars' bucket in Supabase Storage).",
+    "save": "Save",
+    "saved": "Profile updated",
+    "plan": "Subscription",
+    "expires": "Expires {{date}}",
+    "noExpiry": "Free plan — no expiry.",
+    "security": "Security",
+    "oldPassword": "Current password",
+    "newPassword": "New password",
+    "changePassword": "Change password",
+    "passwordChanged": "Password changed",
+    "wrongOld": "Current password is incorrect.",
+    "activity": "Recent activity",
+    "noActivity": "No activity.",
+    "danger": "Danger zone",
+    "logoutAll": "Log out all devices",
+    "logoutAllDesc": "End all your active sessions everywhere.",
+    "loggedOutAll": "Logged out everywhere.",
+    "deleteAccount": "Delete my account",
+    "deleteWarn": "Irreversible: your account and all data will be deleted.",
+    "typeToConfirm": "Type \"{{word}}\" to confirm.",
+    "confirmDelete": "Delete permanently",
+    "deleted": "Account deleted."
+  },
+  "legal": {
+    "updated": "Last updated: {{date}}",
+    "cgu": "Terms", "privacy": "Privacy", "cookies": "Cookies", "backApp": "← Back to app"
+  },
+  "cookies": {
+    "banner": "We use local storage to run the site (language, session). No ads, no trackers.",
+    "learn": "Learn more", "accept": "Accept", "decline": "Decline"
+  },
+  "activity": {
+    "login": "Login", "logout": "Logout", "signup": "Signup",
+    "profile_update": "Profile updated", "password_change": "Password changed",
+    "role_change": "Role changed", "ban": "Ban", "delete_account": "Account deletion"
   }
 }

@@ -25,7 +25,7 @@ const NAV = [
 
 export default function Sidebar({ savedCount, boardCount, open, onClose }) {
   const { t } = useTranslation()
-  const { user, configured, signOut } = useAuth()
+  const { user, configured, signOut, profile, role } = useAuth()
   const toast = useToast()
   const navigate = useNavigate()
   const redditFetcher = useCallback(() => fetchReddit(), [])
@@ -104,21 +104,36 @@ export default function Sidebar({ savedCount, boardCount, open, onClose }) {
           </div>
         </div>
 
-        <div className="m-3 rounded-lg border border-rail-line bg-black/20 p-3">
+        <div className="m-3 space-y-2">
           {configured && user && !user.guest ? (
-            <div className="flex items-center justify-between gap-2">
-              <p className="min-w-0 truncate text-xs font-medium text-slate-200" title={user.email}>{user.email}</p>
-              <button
-                onClick={logout}
-                className="shrink-0 rounded-md bg-rail-hover px-2 py-1 text-[11px] font-semibold text-slate-200 hover:text-white"
+            <>
+              <NavLink
+                to="/profile"
+                onClick={onClose}
+                className={({ isActive }) =>
+                  `flex items-center gap-2 rounded-lg border border-rail-line p-2 transition-colors ${isActive ? 'bg-rail-hover' : 'bg-black/20 hover:bg-rail-hover/60'}`
+                }
               >
+                {profile?.avatar_url ? (
+                  <img src={profile.avatar_url} alt="" className="h-8 w-8 shrink-0 rounded-full object-cover" />
+                ) : (
+                  <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand/40 text-xs font-bold text-white">{(user.email || '?').slice(0, 1).toUpperCase()}</div>
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-xs font-medium text-slate-200">{profile?.full_name || user.email}</p>
+                  <p className="truncate text-[10px] text-rail-muted">{role !== 'user' ? role : t('nav.profile')}</p>
+                </div>
+              </NavLink>
+              <button onClick={logout} className="w-full rounded-md bg-rail-hover px-2 py-1.5 text-[11px] font-semibold text-slate-200 hover:text-white">
                 {t('common.logout')}
               </button>
-            </div>
+            </>
           ) : (
-            <div className="flex items-center gap-2">
-              <span className="h-2 w-2 rounded-full bg-amber-400" />
-              <span className="text-xs font-medium text-slate-200">{t('common.guest')}</span>
+            <div className="rounded-lg border border-rail-line bg-black/20 p-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 rounded-full bg-amber-400" />
+                <span className="text-xs font-medium text-slate-200">{t('common.guest')}</span>
+              </div>
             </div>
           )}
         </div>
