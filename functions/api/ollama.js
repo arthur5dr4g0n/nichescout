@@ -5,7 +5,7 @@ import { json } from '../_shared.js'
 // offline glossary. Run the app locally (npm start) to use the live assistant.
 export async function onRequestPost() {
   return json(
-    { error: 'ollama_unreachable', detail: 'Ollama is local-only. Run NicheScout locally to chat with the assistant.' },
+    { error: 'ollama_unreachable', detail: 'Ollama is local-only. Run MarketMax locally to chat with the assistant.' },
     503,
   )
 }

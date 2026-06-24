@@ -1,9 +1,9 @@
 {
-  "name": "amazon-research-tool",
+  "name": "marketmax",
   "private": true,
   "version": "1.0.0",
   "type": "module",
-  "description": "Amazon product research tool (Helium10 / JungleScout style) — React + Tailwind + Recharts",
+  "description": "MarketMax — Amazon niche intelligence (Helium10 / JungleScout style). React + Tailwind + Recharts + Supabase.",
   "scripts": {
     "start": "vite",
     "dev": "vite",

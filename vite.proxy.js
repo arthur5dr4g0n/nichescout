@@ -45,7 +45,7 @@ function readBody(req) {
 
 // Reddit blocks browser-like UAs as "suspected bots" but allows a unique,
 // descriptive UA. Use that instead of the rotating browser pool.
-const REDDIT_UA = 'NicheScout/1.0 (Amazon FBA research dashboard)'
+const REDDIT_UA = 'MarketMax/1.0 (Amazon FBA research dashboard)'
 
 function parseRedditRss(xml, sub) {
   const items = []
@@ -219,7 +219,7 @@ async function handleOllamaChat(req, res) {
 
 export function researchProxy() {
   return {
-    name: 'nichescout-research-proxy',
+    name: 'marketmax-research-proxy',
     configureServer(server) {
       server.middlewares.use(async (req, res, next) => {
         if (!req.url || !req.url.startsWith('/api/')) return next()

@@ -9,7 +9,7 @@ const USER_AGENTS = [
 export const pickUA = () => USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)]
 
 // Reddit blocks browser-like UAs as bots but allows a unique descriptive one.
-export const REDDIT_UA = 'NicheScout/1.0 (Amazon FBA research dashboard)'
+export const REDDIT_UA = 'MarketMax/1.0 (Amazon FBA research dashboard)'
 
 export const AMAZON_NODES = {
   electronics: 'electronics',
