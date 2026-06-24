@@ -5,6 +5,7 @@ import { COLUMNS } from '../hooks/useKanban'
 import { useAuth } from '../auth/AuthProvider'
 import { useToast } from '../components/Toast'
 import { useUpgrade } from '../components/Upgrade'
+import { usePlan } from '../hooks/usePlan'
 import { downloadCSV } from '../utils/csv'
 import { DownloadIcon, TrashIcon } from '../components/icons'
 
@@ -46,7 +47,8 @@ export default function KanbanPage() {
   const { t } = useTranslation()
   const { user, configured } = useAuth()
   const toast = useToast()
-  const { gate } = useUpgrade()
+  const { gate, promptUpgrade } = useUpgrade()
+  const { isFree, limits } = usePlan()
   const { board, addCard, moveCard, removeCard, updateCard, clear } = kanban
   const [dragOver, setDragOver] = useState(null)
   const [newNiche, setNewNiche] = useState('')
@@ -61,6 +63,11 @@ export default function KanbanPage() {
 
   const add = () => {
     if (!newNiche.trim()) return
+    if (isFree && kanban.count >= limits.kanbanCards) {
+      toast?.info(t('pro.kanbanLimit', { n: limits.kanbanCards }))
+      promptUpgrade()
+      return
+    }
     addCard({ niche: newNiche.trim() }, 'analyser')
     setNewNiche('')
   }

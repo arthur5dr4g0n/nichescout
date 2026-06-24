@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthProvider'
 
-const UpgradeCtx = createContext({ isPro: true, gate: () => true })
+const UpgradeCtx = createContext({ isPro: true, gate: () => true, promptUpgrade: () => {} })
 export const useUpgrade = () => useContext(UpgradeCtx)
 
 export function UpgradeProvider({ children }) {
@@ -17,9 +17,10 @@ export function UpgradeProvider({ children }) {
     setOpen(true)
     return false
   }
+  const promptUpgrade = () => setOpen(true)
 
   return (
-    <UpgradeCtx.Provider value={{ isPro, gate }}>
+    <UpgradeCtx.Provider value={{ isPro, gate, promptUpgrade }}>
       {children}
       {open && <UpgradeModal onClose={() => setOpen(false)} />}
     </UpgradeCtx.Provider>

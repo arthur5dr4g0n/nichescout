@@ -3,13 +3,17 @@ import { useTranslation } from 'react-i18next'
 import { LineChart, Line, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, CartesianGrid, Legend } from 'recharts'
 import { chartTooltipStyle } from './ProductDetailModal'
 import { InfoTip } from './ui'
+import { usePlan } from '../hooks/usePlan'
+import { useUpgrade } from './Upgrade'
 
 const LINE_COLORS = ['#1b4fd8', '#16a34a', '#d97706', '#7c3aed', '#0ea5e9']
 
 // trends: { categories: { Cat: [{keyword, series:[{day,value}], momentum}] } }
 export default function TrendingChart({ trends }) {
   const { t } = useTranslation()
-  const [range, setRange] = useState(30)
+  const { isFree } = usePlan()
+  const { promptUpgrade } = useUpgrade()
+  const [range, setRange] = useState(isFree ? 7 : 30)
 
   const { merged, keys } = useMemo(() => {
     const all = trends?.categories ? Object.values(trends.categories).flat() : []
@@ -35,12 +39,12 @@ export default function TrendingChart({ trends }) {
           {[7, 30].map((r) => (
             <button
               key={r}
-              onClick={() => setRange(r)}
+              onClick={() => (r === 30 && isFree ? promptUpgrade() : setRange(r))}
               className={`rounded-md px-3 py-1 text-xs font-semibold transition-colors ${
                 range === r ? 'bg-brand text-white' : 'text-slate-500 hover:text-slate-800'
               }`}
             >
-              {r}d
+              {r}d{r === 30 && isFree ? ' 🔒' : ''}
             </button>
           ))}
         </div>

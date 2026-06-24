@@ -1,6 +1,8 @@
 import { useCallback, useMemo } from 'react'
-import { useOutletContext, useNavigate } from 'react-router-dom'
+import { useOutletContext, useNavigate, Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
+import { usePlan } from '../hooks/usePlan'
+import { useUpgrade } from '../components/Upgrade'
 import { fetchTrends } from '../api/trends'
 import { fetchReddit } from '../api/reddit'
 import { useCachedResource } from '../hooks/useCachedResource'
@@ -31,6 +33,8 @@ export default function DashboardPage() {
   const navigate = useNavigate()
   const toast = useToast()
   const online = useOnline()
+  const { isFree, limits } = usePlan()
+  const { promptUpgrade } = useUpgrade()
   const trendsFetcher = useCallback(() => fetchTrends('FR'), [])
   const redditFetcher = useCallback(() => fetchReddit(), [])
   const trends = useCachedResource('trends.FR', trendsFetcher, TTL.day)
@@ -44,6 +48,11 @@ export default function DashboardPage() {
   const onAdd = (n) => {
     if (kanban.nicheSet.has(n.niche?.toLowerCase())) {
       toast?.info(t('toast.boardExists'))
+      return
+    }
+    if (isFree && kanban.count >= limits.kanbanCards) {
+      toast?.info(t('pro.kanbanLimit', { n: limits.kanbanCards }))
+      promptUpgrade()
       return
     }
     kanban.addCard({ niche: n.niche, score: n.score, color: n.color, category: n.category })
@@ -77,7 +86,14 @@ export default function DashboardPage() {
             {Array.from({ length: 4 }).map((_, i) => <div key={i} className="card h-52 animate-pulse" />)}
           </div>
         ) : (
-          <HotNiches niches={hot} onAdd={onAdd} addedSet={kanban.nicheSet} />
+          <>
+            <HotNiches niches={isFree ? hot.slice(0, limits.hotNiches) : hot} onAdd={onAdd} addedSet={kanban.nicheSet} />
+            {isFree && hot.length > limits.hotNiches && (
+              <Link to="/pricing" className="mt-3 block rounded-xl border border-dashed border-brand/40 bg-brand-tint p-3 text-center text-sm font-semibold text-brand hover:opacity-80">
+                🔒 {t('pro.moreNiches', { n: hot.length - limits.hotNiches })}
+              </Link>
+            )}
+          </>
         )}
       </div>
 

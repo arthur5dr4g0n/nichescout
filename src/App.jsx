@@ -22,6 +22,8 @@ import ProfilePage from './pages/ProfilePage'
 import AdminPage from './pages/AdminPage'
 import PricingPage from './pages/PricingPage'
 import AuthCallback from './pages/AuthCallback'
+import PaymentSuccess from './pages/payment/PaymentSuccess'
+import PaymentCancel from './pages/payment/PaymentCancel'
 
 export default function App() {
   return (
@@ -35,6 +37,8 @@ export default function App() {
         </Route>
 
         <Route path="/auth/callback" element={<AuthCallback />} />
+        <Route path="/payment/success" element={<PaymentSuccess />} />
+        <Route path="/payment/cancel" element={<PaymentCancel />} />
 
         <Route element={<LegalLayout />}>
           <Route path="/cgu" element={<LegalPage doc="cgu" />} />

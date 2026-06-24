@@ -5,6 +5,7 @@ import { useAuth } from '../auth/AuthProvider'
 import { useToast } from '../components/Toast'
 import { supabase } from '../lib/supabase'
 import { updateProfile, getActivity, deleteOwnAccount, logActivity } from '../lib/account'
+import { openBillingPortal } from '../lib/stripe'
 import { EmptyState, Badge } from '../components/ui'
 import { timeAgo } from '../utils/format'
 
@@ -150,6 +151,20 @@ export default function ProfilePage() {
           <p className="mt-3 text-sm text-slate-600">
             {profile?.plan_expires_at ? t('profile.expires', { date: new Date(profile.plan_expires_at).toLocaleDateString() }) : t('profile.noExpiry')}
           </p>
+          {profile?.stripe_customer_id && (
+            <button
+              className="btn-ghost mt-3"
+              onClick={async () => {
+                try {
+                  await openBillingPortal()
+                } catch (e) {
+                  toast?.error(e.message || t('errors.generic'))
+                }
+              }}
+            >
+              {t('profile.manageSub')}
+            </button>
+          )}
         </Section>
 
         {/* Security */}

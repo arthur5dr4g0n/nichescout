@@ -181,7 +181,8 @@
     "deleteWarn": "Action irréversible : ton compte et toutes tes données seront supprimés.",
     "typeToConfirm": "Tape « {{word}} » pour confirmer.",
     "confirmDelete": "Supprimer définitivement",
-    "deleted": "Compte supprimé."
+    "deleted": "Compte supprimé.",
+    "manageSub": "Gérer mon abonnement"
   },
   "legal": {
     "updated": "Dernière mise à jour : {{date}}",
@@ -210,6 +211,18 @@
     "title": "Tarifs", "subtitle": "Choisis le plan qui te correspond.",
     "free": "Gratuit", "proPrice": "9€/mois", "current": "Plan actuel", "choose": "Passer à Pro",
     "comingSoon": "La facturation arrive bientôt — contacte-nous en attendant.",
+    "monthly": "Mensuel", "yearly": "Annuel", "yearlySave": "−28%", "perMonth": "/mois", "perYear": "/an",
+    "startTrial": "Commencer l'essai →", "continueFree": "Continuer gratuit", "trial": "Essai 7 jours gratuit",
+    "secure": "🔒 Paiement sécurisé par Stripe · Annulez à tout moment · Sans engagement",
+    "faqTitle": "Questions fréquentes",
+    "fNiches": "Niches chaudes", "fSearches": "Recherches", "fCsv": "Export CSV", "fAi": "Assistant IA", "fTrends": "Tendances", "fSupport": "Support prioritaire",
+    "faq": [
+      { "q": "Est-ce sécurisé ?", "a": "Le paiement est géré par Stripe (certifié PCI-DSS niveau 1). MarketMax ne voit jamais vos données bancaires." },
+      { "q": "Puis-je annuler ?", "a": "Oui, à tout moment depuis votre profil. Aucun frais d'annulation." },
+      { "q": "Que se passe-t-il à l'annulation ?", "a": "Accès Pro jusqu'à la fin de la période payée, puis retour automatique en Gratuit." },
+      { "q": "Facture disponible ?", "a": "Oui, depuis le portail Stripe accessible dans votre profil." },
+      { "q": "Remboursement ?", "a": "Remboursement intégral sous 14 jours (droit de rétractation EU)." }
+    ],
     "note": "Les exports CSV et fonctions avancées sont réservés au plan Pro. Un admin peut changer ton plan.",
     "freeFeatures": ["Recherche produits & mots-clés", "Tendances & best-sellers", "Niche score", "Tableau Kanban", "Sauvegarde de produits"],
     "proFeatures": ["Tout le plan Gratuit", "Exports CSV illimités", "Analyse concurrents avancée", "Assistant IA prioritaire", "Support prioritaire"]
@@ -218,5 +231,22 @@
     "title": "Fonctionnalité Pro",
     "body": "Passez à Pro pour accéder à cette fonctionnalité.",
     "cta": "Voir les offres →", "later": "Plus tard"
+  },
+  "progate": { "unlock": "Passez Pro" },
+  "pro": {
+    "banner": "Passez Pro — Débloquez tout",
+    "searchLimit": "Limite de 5 recherches/jour atteinte (plan Gratuit).",
+    "kanbanLimit": "Limite de {{n}} cartes (plan Gratuit).",
+    "moreNiches": "+{{n}} niches en Pro",
+    "assistantTitle": "Assistant IA réservé au Pro",
+    "assistantBody": "Passe à Pro pour poser tes questions FBA à l'assistant IA local."
+  },
+  "payment": {
+    "verifying": "Vérification du paiement…",
+    "welcome": "Bienvenue dans MarketMax Pro !",
+    "redirecting": "Redirection vers le dashboard…",
+    "cancelTitle": "Pas de problème !",
+    "cancelBody": "Ton paiement a été annulé, aucun montant n'a été débité.",
+    "backToPricing": "Retour aux offres"
   }
 }

@@ -181,7 +181,8 @@
     "deleteWarn": "Irreversible: your account and all data will be deleted.",
     "typeToConfirm": "Type \"{{word}}\" to confirm.",
     "confirmDelete": "Delete permanently",
-    "deleted": "Account deleted."
+    "deleted": "Account deleted.",
+    "manageSub": "Manage subscription"
   },
   "legal": {
     "updated": "Last updated: {{date}}",
@@ -210,6 +211,18 @@
     "title": "Pricing", "subtitle": "Pick the plan that fits.",
     "free": "Free", "proPrice": "$9/mo", "current": "Current plan", "choose": "Go Pro",
     "comingSoon": "Billing is coming soon — contact us in the meantime.",
+    "monthly": "Monthly", "yearly": "Yearly", "yearlySave": "−28%", "perMonth": "/mo", "perYear": "/yr",
+    "startTrial": "Start free trial →", "continueFree": "Continue free", "trial": "7-day free trial",
+    "secure": "🔒 Secure payment by Stripe · Cancel anytime · No commitment",
+    "faqTitle": "FAQ",
+    "fNiches": "Hot niches", "fSearches": "Searches", "fCsv": "CSV export", "fAi": "AI Assistant", "fTrends": "Trends", "fSupport": "Priority support",
+    "faq": [
+      { "q": "Is it secure?", "a": "Payment is handled by Stripe (PCI-DSS Level 1 certified). MarketMax never sees your card details." },
+      { "q": "Can I cancel?", "a": "Yes, anytime from your profile. No cancellation fees." },
+      { "q": "What happens when I cancel?", "a": "Pro access until the end of the paid period, then automatic return to Free." },
+      { "q": "Invoices?", "a": "Yes, from the Stripe portal in your profile." },
+      { "q": "Refunds?", "a": "Full refund within 14 days (EU right of withdrawal)." }
+    ],
     "note": "CSV exports and advanced features are Pro-only. An admin can change your plan.",
     "freeFeatures": ["Product & keyword research", "Trends & best sellers", "Niche score", "Kanban board", "Save products"],
     "proFeatures": ["Everything in Free", "Unlimited CSV exports", "Advanced competitor analysis", "Priority AI assistant", "Priority support"]
@@ -218,5 +231,22 @@
     "title": "Pro feature",
     "body": "Upgrade to Pro to unlock this feature.",
     "cta": "See plans →", "later": "Later"
+  },
+  "progate": { "unlock": "Go Pro" },
+  "pro": {
+    "banner": "Go Pro — Unlock everything",
+    "searchLimit": "5 searches/day limit reached (Free plan).",
+    "kanbanLimit": "{{n}}-card limit (Free plan).",
+    "moreNiches": "+{{n}} niches with Pro",
+    "assistantTitle": "AI Assistant is Pro-only",
+    "assistantBody": "Upgrade to Pro to ask the local AI assistant your FBA questions."
+  },
+  "payment": {
+    "verifying": "Verifying payment…",
+    "welcome": "Welcome to MarketMax Pro!",
+    "redirecting": "Redirecting to dashboard…",
+    "cancelTitle": "No worries!",
+    "cancelBody": "Your payment was cancelled, nothing was charged.",
+    "backToPricing": "Back to pricing"
   }
 }

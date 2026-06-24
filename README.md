@@ -138,6 +138,41 @@ signup/login (+ **Google OAuth**), a protected dashboard, a **profile page**, an
 > **On Cloudflare:** add `VITE_SUPABASE_URL` + `VITE_SUPABASE_ANON_KEY` under **Pages → Settings →
 > Environment variables**, add your `*.pages.dev` URL to Supabase **URL Configuration**, then redeploy.
 
+## 💎 Stripe setup (Pro subscriptions)
+
+Optional. Free works forever; Stripe unlocks the **Pro** plan (29€/mo or 249€/yr, 7-day trial).
+**Test mode by default** — use `pk_test_…` / `sk_test_…` until everything is green, then switch to live.
+
+> 🔐 **Security model:** the secret key + Supabase service key live **only** in Cloudflare (server).
+> The webhook is the **only** thing that grants Pro — it verifies the Stripe signature, derives the
+> userId from Stripe metadata (never the client), and is **idempotent**. The frontend never sees a secret.
+
+1. **DB:** run **[`supabase/stripe.sql`](supabase/stripe.sql)** in the Supabase SQL Editor
+   (adds `stripe_customer_id` / `stripe_subscription_id`, a `usage` column, and a `stripe_events` idempotency table).
+2. **Stripe → Products:** create two recurring prices — *Pro Monthly* and *Pro Yearly* — and copy their **Price IDs**.
+3. **Frontend key:** put the publishable key in `.env` (`VITE_STRIPE_PUBLIC_KEY=pk_test_…`) **and** in
+   Cloudflare → Pages → Settings → **Environment variables** (it's build-time).
+4. **Cloudflare Function env vars** (server-side, *not* `VITE_` prefixed):
+   ```
+   STRIPE_SECRET_KEY=sk_test_…
+   STRIPE_PRICE_MONTHLY=price_…
+   STRIPE_PRICE_YEARLY=price_…
+   STRIPE_WEBHOOK_SECRET=whsec_…
+   SUPABASE_URL=https://xxxx.supabase.co
+   SUPABASE_ANON_KEY=eyJ…            # anon (for token verification)
+   SUPABASE_SERVICE_KEY=eyJ…         # service_role (server only!)
+   ```
+5. **Webhook:** Stripe → Developers → Webhooks → **Add endpoint** →
+   `https://<your-site>.pages.dev/api/webhook` → select events:
+   `checkout.session.completed`, `customer.subscription.updated`,
+   `customer.subscription.deleted`, `invoice.payment_failed`.
+   Copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`, then redeploy.
+6. Test with Stripe's `4242 4242 4242 4242` card → you land on `/payment/success` and become Pro.
+   Flip to live keys when ready.
+
+**Endpoints (Cloudflare Functions):** `POST /api/create-checkout`, `POST /api/customer-portal`, `POST /api/webhook`.
+**Manage subscription:** Pro users get a "Manage subscription" button in `/profile` (Stripe billing portal).
+
 ## 💳 Optional paid APIs (Search / Keywords)
 
 The product Search and Keyword pages can use paid APIs for richer data. Edit `.env`

@@ -1,7 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { checkOllama, pickModel, askOllama } from '../api/ollama'
 import { useMetrics } from '../hooks/useMetrics'
+import { usePlan } from '../hooks/usePlan'
 import { SparkIcon } from '../components/icons'
 
 function FallbackGlossary({ t, METRICS }) {
@@ -28,6 +30,7 @@ function FallbackGlossary({ t, METRICS }) {
 export default function AssistantPage() {
   const { t, i18n } = useTranslation()
   const METRICS = useMetrics()
+  const { isFree } = usePlan()
   const lang = i18n.language?.startsWith('en') ? 'en' : 'fr'
   const [status, setStatus] = useState({ checking: true, running: false, model: null, models: [] })
   const [messages, setMessages] = useState([])
@@ -60,6 +63,23 @@ export default function AssistantPage() {
     } finally {
       setSending(false)
     }
+  }
+
+  if (isFree) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-xl font-bold text-slate-900">{t('assistant.title')}</h1>
+          <p className="mt-1 text-sm text-slate-500">{t('assistant.subtitle')}</p>
+        </div>
+        <div className="card flex flex-col items-center gap-3 p-10 text-center">
+          <div className="text-4xl">🔒</div>
+          <h2 className="text-lg font-semibold text-slate-900">{t('pro.assistantTitle')}</h2>
+          <p className="max-w-sm text-sm text-slate-500">{t('pro.assistantBody')}</p>
+          <Link to="/pricing" className="btn-primary">{t('progate.unlock')}</Link>
+        </div>
+      </div>
+    )
   }
 
   return (

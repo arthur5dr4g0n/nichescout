@@ -5,6 +5,8 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip as RTooltip, ResponsiveContainer, 
 import { searchProducts } from '../api/amazon'
 import { useAsync } from '../hooks/useAsync'
 import { useToast } from '../components/Toast'
+import { useUpgrade } from '../components/Upgrade'
+import { useSearchQuota } from '../hooks/useQuota'
 import { formatCurrency, formatCompact } from '../utils/format'
 import { SearchBar, SkeletonGrid, ErrorState, EmptyState, SectionTitle } from '../components/ui'
 import { chartTooltipStyle } from '../components/ProductDetailModal'
@@ -42,12 +44,20 @@ export default function SearchPage() {
   const { saved, openProduct } = useOutletContext()
   const { t } = useTranslation()
   const toast = useToast()
+  const { promptUpgrade } = useUpgrade()
+  const { consume } = useSearchQuota()
   const [query, setQuery] = useState('')
   const { loading, error, data, ran, run } = useAsync(searchProducts)
 
-  const go = (q) => {
+  const go = async (q) => {
     const term = (q ?? query).trim()
     if (!term) return
+    const { allowed } = await consume()
+    if (!allowed) {
+      toast?.info(t('pro.searchLimit'))
+      promptUpgrade()
+      return
+    }
     setQuery(term)
     run(term)
   }
