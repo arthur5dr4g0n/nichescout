@@ -36,16 +36,20 @@ export async function onRequestPost({ env, request }) {
         break
       }
       case 'customer.subscription.updated': {
-        const active = ['active', 'trialing'].includes(o.status)
+        // past_due = paiement échoué mais Stripe relance (dunning) -> on garde Pro en période de grâce.
+        const active = ['active', 'trialing', 'past_due'].includes(o.status)
+        // L'API Stripe récente a déplacé current_period_end sur l'item -> fallback.
+        const periodEnd = o.current_period_end ?? o.items?.data?.[0]?.current_period_end
         await supaPatch(env, 'profiles', `stripe_customer_id=eq.${o.customer}`, {
           plan: active ? 'pro' : 'free',
           stripe_subscription_id: o.id,
-          plan_expires_at: o.current_period_end ? new Date(o.current_period_end * 1000).toISOString() : null,
+          plan_expires_at: periodEnd ? new Date(periodEnd * 1000).toISOString() : null,
         })
         break
       }
-      case 'customer.subscription.deleted':
-      case 'invoice.payment_failed': {
+      // Révocation dure UNIQUEMENT à l'annulation de l'abonnement.
+      // (Pas sur invoice.payment_failed : Stripe relance ~2 semaines avant d'abandonner.)
+      case 'customer.subscription.deleted': {
         await supaPatch(env, 'profiles', `stripe_customer_id=eq.${o.customer}`, {
           plan: 'free',
           plan_expires_at: null,
