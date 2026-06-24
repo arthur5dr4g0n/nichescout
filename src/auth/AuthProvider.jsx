@@ -22,26 +22,46 @@ export function AuthProvider({ children }) {
 
   useEffect(() => {
     if (!isSupabaseConfigured) return
+    // Are we returning from an OAuth (Google) redirect? Then the session is set
+    // a beat later via the code exchange — don't flip loading=false yet, or
+    // RequireAuth would bounce to /login and drop the code.
+    const isOAuthReturn = /[?&#](code|access_token|error_description)=/.test(window.location.href)
+
     supabase.auth.getSession().then(({ data }) => {
-      setSession(data.session)
-      setUser(data.session?.user ?? null)
       if (data.session?.user) {
+        setSession(data.session)
+        setUser(data.session.user)
         loadProfile(data.session.user.id)
-        // Log a login when returning from an OAuth (Google) redirect.
-        if (localStorage.getItem('marketmax.pending_oauth')) {
-          localStorage.removeItem('marketmax.pending_oauth')
-          logActivity(data.session.user.id, 'login', { method: 'google' })
-        }
+        setLoading(false)
+      } else if (!isOAuthReturn) {
+        setLoading(false)
       }
-      setLoading(false)
+      // OAuth return without a session yet -> stay loading; onAuthStateChange resolves it.
     })
+
     const { data: sub } = supabase.auth.onAuthStateChange((event, s) => {
       setSession(s)
       setUser(s?.user ?? null)
-      if (s?.user) loadProfile(s.user.id)
-      else setProfile(null)
+      if (s?.user) {
+        loadProfile(s.user.id)
+        if (event === 'SIGNED_IN' && localStorage.getItem('marketmax.pending_oauth')) {
+          localStorage.removeItem('marketmax.pending_oauth')
+          logActivity(s.user.id, 'login', { method: 'google' })
+          // strip the OAuth params from the URL once signed in
+          window.history.replaceState({}, '', window.location.pathname)
+        }
+      } else {
+        setProfile(null)
+      }
+      setLoading(false)
     })
-    return () => sub.subscription.unsubscribe()
+
+    // Safety net: never hang on the spinner if the exchange fails.
+    const safety = setTimeout(() => setLoading(false), 6000)
+    return () => {
+      clearTimeout(safety)
+      sub.subscription.unsubscribe()
+    }
   }, [loadProfile])
 
   const api = useMemo(
