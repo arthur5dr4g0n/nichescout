@@ -4,12 +4,14 @@ import { useTranslation } from 'react-i18next'
 export default function Logo({ size = 'md', tagline = false, onDark = false }) {
   const { t } = useTranslation()
   const wordSize = size === 'lg' ? 'text-3xl' : 'text-lg'
-  const tile = size === 'lg' ? 'h-12 w-12 text-xl' : 'h-9 w-9 text-sm'
+  const tile = size === 'lg' ? 'h-12 w-12' : 'h-9 w-9'
   return (
     <div className="flex items-center gap-2.5">
-      <div className={`flex ${tile} shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-brand to-[#0EA5E9] font-bold text-white shadow-lg shadow-brand/30`}>
-        MM
-      </div>
+      <img
+        src="/marketmax-logo.png"
+        alt="MarketMax"
+        className={`${tile} shrink-0 rounded-xl object-cover shadow-lg shadow-brand/30`}
+      />
       <div>
         <p className={`font-bold leading-none ${wordSize}`} style={{ fontFamily: 'Inter, sans-serif' }}>
           <span style={{ color: '#1B4FD8' }}>Market</span>

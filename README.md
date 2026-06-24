@@ -243,10 +243,17 @@ Cloudflare Pages rebuilds automatically on push to `main`.
 
 ### Rename the project to `marketmax`
 The default URL follows the Pages **project name**. To get `marketmax.pages.dev`:
-- Cloudflare → your Pages project → **Settings → General → Rename** → `nichescout` → `marketmax`.
-- ⚠️ The URL changes, so update **Supabase → Auth → URL Configuration**: set **Site URL** to
-  `https://marketmax.pages.dev` and add `https://marketmax.pages.dev/**` to **Redirect URLs**
-  (otherwise Google/email auth redirects break). Update Google Cloud only if you used the app URL anywhere.
+
+1. Cloudflare → **Workers & Pages → nichescout → Settings → General → Rename** → `marketmax`.
+   New URL: `https://marketmax.pages.dev`. The Git link, env vars and Stripe config are **kept**.
+2. **Supabase → Auth → URL Configuration:** set **Site URL** to `https://marketmax.pages.dev`
+   and replace `nichescout` with `marketmax` in **Redirect URLs** (else Google/email auth break).
+3. **Supabase → Auth → Providers → Google:** redirect URL is **unchanged** (it points to
+   `…supabase.co`, not `pages.dev`).
+4. **Google Cloud Console → OAuth client:** authorized redirect URIs **unchanged** (also `…supabase.co`).
+5. **Stripe success/cancel URLs:** nothing to change — `functions/api/create-checkout.js` builds them
+   from the request origin (`${origin}`), so they follow the new domain automatically.
+6. `public/robots.txt` + `public/sitemap.xml` already point to `marketmax.pages.dev`.
 
 > ⚠️ From Cloudflare's datacenter IPs, Reddit and Amazon block scraping more aggressively than your
 > home IP, so online they'll often show **mock** data (Google Trends usually stays live). The
