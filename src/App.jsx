@@ -19,6 +19,8 @@ import SavedPage from './pages/SavedPage'
 import KanbanPage from './pages/KanbanPage'
 import AssistantPage from './pages/AssistantPage'
 import ProfilePage from './pages/ProfilePage'
+import AdminPage from './pages/AdminPage'
+import PricingPage from './pages/PricingPage'
 import AuthCallback from './pages/AuthCallback'
 
 export default function App() {
@@ -57,6 +59,8 @@ export default function App() {
           <Route path="/board" element={<KanbanPage />} />
           <Route path="/assistant" element={<AssistantPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/pricing" element={<PricingPage />} />
+          <Route path="/admin" element={<AdminPage />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/" replace />} />

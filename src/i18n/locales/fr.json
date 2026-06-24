@@ -11,6 +11,7 @@
     "board": "Tableau de suivi", "boardDesc": "Pipeline Kanban",
     "assistant": "Assistant IA", "assistantDesc": "Q&R FBA factuelles",
     "profile": "Profil",
+    "admin": "Admin", "adminDesc": "Gestion des utilisateurs",
     "buzz": "🔥 Buzz FBA"
   },
   "common": {
@@ -193,6 +194,29 @@
   "activity": {
     "login": "Connexion", "logout": "Déconnexion", "signup": "Inscription",
     "profile_update": "Profil modifié", "password_change": "Mot de passe changé",
-    "role_change": "Rôle modifié", "ban": "Bannissement", "delete_account": "Suppression de compte"
+    "role_change": "Rôle modifié", "ban": "Bannissement", "delete_account": "Suppression de compte",
+    "plan_change": "Plan modifié"
+  },
+  "admin": {
+    "title": "Administration",
+    "subtitle": "{{n}} utilisateurs",
+    "searchPlaceholder": "Rechercher par email…",
+    "colEmail": "Email", "colRole": "Rôle", "colPlan": "Plan", "colCreated": "Créé le", "colActions": "Actions",
+    "you": "toi", "protected": "Compte protégé", "deleteUser": "Supprimer ce compte",
+    "confirmDelete": "Supprimer le compte {{email}} ? Action irréversible.",
+    "roleChanged": "Rôle mis à jour", "planChanged": "Plan mis à jour", "deleted": "Compte supprimé"
+  },
+  "pricing": {
+    "title": "Tarifs", "subtitle": "Choisis le plan qui te correspond.",
+    "free": "Gratuit", "proPrice": "9€/mois", "current": "Plan actuel", "choose": "Passer à Pro",
+    "comingSoon": "La facturation arrive bientôt — contacte-nous en attendant.",
+    "note": "Les exports CSV et fonctions avancées sont réservés au plan Pro. Un admin peut changer ton plan.",
+    "freeFeatures": ["Recherche produits & mots-clés", "Tendances & best-sellers", "Niche score", "Tableau Kanban", "Sauvegarde de produits"],
+    "proFeatures": ["Tout le plan Gratuit", "Exports CSV illimités", "Analyse concurrents avancée", "Assistant IA prioritaire", "Support prioritaire"]
+  },
+  "upgrade": {
+    "title": "Fonctionnalité Pro",
+    "body": "Passez à Pro pour accéder à cette fonctionnalité.",
+    "cta": "Voir les offres →", "later": "Plus tard"
   }
 }

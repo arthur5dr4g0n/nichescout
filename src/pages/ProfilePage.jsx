@@ -104,7 +104,7 @@ export default function ProfilePage() {
     if (error) return toast?.error(t('toast.syncError'))
     await signOut()
     toast?.info(t('profile.deleted'))
-    navigate('/login')
+    navigate('/')
   }
 
   const ACTION_LABEL = {

@@ -11,6 +11,7 @@
     "board": "Research Board", "boardDesc": "Kanban pipeline",
     "assistant": "AI Assistant", "assistantDesc": "Factual FBA Q&A",
     "profile": "Profile",
+    "admin": "Admin", "adminDesc": "User management",
     "buzz": "🔥 FBA Buzz"
   },
   "common": {
@@ -193,6 +194,29 @@
   "activity": {
     "login": "Login", "logout": "Logout", "signup": "Signup",
     "profile_update": "Profile updated", "password_change": "Password changed",
-    "role_change": "Role changed", "ban": "Ban", "delete_account": "Account deletion"
+    "role_change": "Role changed", "ban": "Ban", "delete_account": "Account deletion",
+    "plan_change": "Plan changed"
+  },
+  "admin": {
+    "title": "Administration",
+    "subtitle": "{{n}} users",
+    "searchPlaceholder": "Search by email…",
+    "colEmail": "Email", "colRole": "Role", "colPlan": "Plan", "colCreated": "Created", "colActions": "Actions",
+    "you": "you", "protected": "Protected account", "deleteUser": "Delete this account",
+    "confirmDelete": "Delete {{email}}? This is irreversible.",
+    "roleChanged": "Role updated", "planChanged": "Plan updated", "deleted": "Account deleted"
+  },
+  "pricing": {
+    "title": "Pricing", "subtitle": "Pick the plan that fits.",
+    "free": "Free", "proPrice": "$9/mo", "current": "Current plan", "choose": "Go Pro",
+    "comingSoon": "Billing is coming soon — contact us in the meantime.",
+    "note": "CSV exports and advanced features are Pro-only. An admin can change your plan.",
+    "freeFeatures": ["Product & keyword research", "Trends & best sellers", "Niche score", "Kanban board", "Save products"],
+    "proFeatures": ["Everything in Free", "Unlimited CSV exports", "Advanced competitor analysis", "Priority AI assistant", "Priority support"]
+  },
+  "upgrade": {
+    "title": "Pro feature",
+    "body": "Upgrade to Pro to unlock this feature.",
+    "cta": "See plans →", "later": "Later"
   }
 }

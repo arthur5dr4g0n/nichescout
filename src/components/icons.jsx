@@ -107,3 +107,9 @@ export const BoardIcon = make(
 export const FlameIcon = make(
   <path d="M12 2s4 4 4 8a4 4 0 0 1-8 0c0-1 .5-2 1-2.5C9 9 9 11 11 11c0-2-1-3 1-5 .8 1.5 2 2 2 4M12 22a6 6 0 0 1-6-6c0-1.5.5-2.5 1-3" />
 )
+export const ShieldIcon = make(
+  <>
+    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+    <path d="m9 12 2 2 4-4" />
+  </>,
+)

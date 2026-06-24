@@ -5,6 +5,7 @@ import { keywordResearch } from '../api/keywords'
 import { useAsync } from '../hooks/useAsync'
 import { useMetrics } from '../hooks/useMetrics'
 import { useToast } from '../components/Toast'
+import { useUpgrade } from '../components/Upgrade'
 import { formatNumber, formatCompact, formatCurrency } from '../utils/format'
 import { downloadCSV } from '../utils/csv'
 import { SearchBar, SkeletonTable, ErrorState, EmptyState, CompetitionBadge, TrendBadge, InfoTip } from '../components/ui'
@@ -48,6 +49,7 @@ export default function KeywordsPage() {
   const { t } = useTranslation()
   const METRICS = useMetrics()
   const toast = useToast()
+  const { gate } = useUpgrade()
   const [seed, setSeed] = useState('')
   const { loading, error, data, ran, run } = useAsync(keywordResearch)
 
@@ -59,6 +61,7 @@ export default function KeywordsPage() {
   }
 
   const exportCsv = () => {
+    if (!gate()) return
     downloadCSV(`keywords-${seed || 'export'}.csv`, data, [
       { key: 'keyword', label: 'Keyword' }, { key: 'volume', label: 'Search Volume' },
       { key: 'competition', label: 'Competition' }, { key: 'cpc', label: 'CPC (USD)' }, { key: 'trend', label: 'Trend' },

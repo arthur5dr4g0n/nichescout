@@ -2,6 +2,7 @@ import { useOutletContext } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthProvider'
 import { useToast } from '../components/Toast'
+import { useUpgrade } from '../components/Upgrade'
 import { formatCurrency, formatCompact, formatNumber, formatRank } from '../utils/format'
 import { downloadCSV } from '../utils/csv'
 import { EmptyState, SectionTitle, RatingStars } from '../components/ui'
@@ -14,10 +15,12 @@ export default function SavedPage() {
   const { t } = useTranslation()
   const { user, configured } = useAuth()
   const toast = useToast()
+  const { gate } = useUpgrade()
   const items = saved.saved
   const synced = configured && user && !user.guest
 
   const exportCsv = () => {
+    if (!gate()) return
     downloadCSV('marketmax-saved.csv', items, [
       { key: 'asin', label: 'ASIN' }, { key: 'title', label: 'Title' }, { key: 'brand', label: 'Brand' },
       { key: 'category', label: 'Category' }, { key: 'price', label: 'Price' }, { key: 'bsr', label: 'BSR' },

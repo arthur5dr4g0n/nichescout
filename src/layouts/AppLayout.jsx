@@ -8,6 +8,7 @@ import { useSavedProducts } from '../hooks/useSavedProducts'
 import { useKanban } from '../hooks/useKanban'
 import { useOnline } from '../hooks/useOnline'
 import { useToast } from '../components/Toast'
+import { UpgradeProvider } from '../components/Upgrade'
 import { MenuIcon } from '../components/icons'
 
 export default function AppLayout() {
@@ -49,7 +50,9 @@ export default function AppLayout() {
         </header>
 
         <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
-          <Outlet context={{ saved, kanban, openProduct: setSelected }} />
+          <UpgradeProvider>
+            <Outlet context={{ saved, kanban, openProduct: setSelected }} />
+          </UpgradeProvider>
         </main>
       </div>
 

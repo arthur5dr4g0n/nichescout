@@ -47,7 +47,9 @@ Build for production with `npm run build`, preview with `npm run preview`.
 | **AI Assistant** | Local Ollama chat, restricted to **factual** FBA questions (definitions only). |
 | **Accounts** | Signup / login / logout + **Google OAuth**, email confirmation, "remember me", password reset (via Supabase). |
 | **Profile** (`/profile`) | Edit name + avatar, change password (old-password check), plan + expiry, last-10 activity, danger zone (delete account / logout all devices). |
-| **Audit trail** | `activity_logs` records login, logout, role_change, ban, delete_account + IP. |
+| **Admin panel** (`/admin`) | admin/super_admin only: list users, change role/plan, delete accounts, search by email (via SECURITY DEFINER RPCs). |
+| **Pricing & Pro gating** (`/pricing`) | Free vs Pro; Pro-only actions (CSV exports) show a 🔒 upgrade modal for free users. |
+| **Audit trail** | `activity_logs` records login, logout, role_change, plan_change, ban, delete_account + IP. |
 | **Legal** | `/cgu`, `/confidentialite` (GDPR), `/cookies` + cookie-consent banner. Roles: `user` / `admin` / `super_admin` (1st user). |
 
 Plus: **🇫🇷/🇬🇧 language toggle** (i18next, French default, saved to localStorage), **toast notifications**,
@@ -121,6 +123,8 @@ signup/login (+ **Google OAuth**), a protected dashboard, a **profile page**, an
 3. **SQL Editor → New query** → paste & run **[`supabase/schema.sql`](supabase/schema.sql)** (in this repo).
    It creates `profiles`, `user_data`, `activity_logs`, row-level security, the self-service
    **delete-account** function, and a trigger that makes the **first registered user a `super_admin`**.
+   Then run **[`supabase/admin.sql`](supabase/admin.sql)** too — it adds the admin-panel RPCs
+   (`admin_list_users`, `admin_set_role`, `admin_set_plan`, `admin_delete_user`).
 4. **Authentication → Providers → Email**: keep **Confirm email** on (auto-sends the confirmation email).
    Under **URL Configuration**, add your site URLs (localhost + your `.pages.dev`) so confirm/reset links work.
 5. **(Optional) Google login** — Authentication → Providers → **Google** → enable. Create OAuth credentials
@@ -201,6 +205,13 @@ git commit -m "your change"
 git push
 ```
 Cloudflare Pages rebuilds automatically on push to `main`.
+
+### Rename the project to `marketmax`
+The default URL follows the Pages **project name**. To get `marketmax.pages.dev`:
+- Cloudflare → your Pages project → **Settings → General → Rename** → `nichescout` → `marketmax`.
+- ⚠️ The URL changes, so update **Supabase → Auth → URL Configuration**: set **Site URL** to
+  `https://marketmax.pages.dev` and add `https://marketmax.pages.dev/**` to **Redirect URLs**
+  (otherwise Google/email auth redirects break). Update Google Cloud only if you used the app URL anywhere.
 
 > ⚠️ From Cloudflare's datacenter IPs, Reddit and Amazon block scraping more aggressively than your
 > home IP, so online they'll often show **mock** data (Google Trends usually stays live). The

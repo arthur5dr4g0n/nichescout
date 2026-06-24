@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next'
 import { COLUMNS } from '../hooks/useKanban'
 import { useAuth } from '../auth/AuthProvider'
 import { useToast } from '../components/Toast'
+import { useUpgrade } from '../components/Upgrade'
 import { downloadCSV } from '../utils/csv'
 import { DownloadIcon, TrashIcon } from '../components/icons'
 
@@ -45,6 +46,7 @@ export default function KanbanPage() {
   const { t } = useTranslation()
   const { user, configured } = useAuth()
   const toast = useToast()
+  const { gate } = useUpgrade()
   const { board, addCard, moveCard, removeCard, updateCard, clear } = kanban
   const [dragOver, setDragOver] = useState(null)
   const [newNiche, setNewNiche] = useState('')
@@ -66,6 +68,7 @@ export default function KanbanPage() {
   const onClear = () => { clear(); toast?.info(t('toast.boardCleared')) }
 
   const exportCsv = () => {
+    if (!gate()) return
     const rows = COLUMNS.flatMap((col) => board[col.id].map((c) => ({ column: t(`kanban.col.${col.id}`), ...c, date: new Date(c.date).toISOString().slice(0, 10) })))
     downloadCSV('marketmax-board.csv', rows, [
       { key: 'column', label: 'Status' }, { key: 'niche', label: 'Niche' }, { key: 'score', label: 'Score' },

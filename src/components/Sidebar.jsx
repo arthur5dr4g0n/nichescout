@@ -6,7 +6,7 @@ import { useToast } from './Toast'
 import { fetchReddit } from '../api/reddit'
 import { useCachedResource } from '../hooks/useCachedResource'
 import { TTL } from '../utils/cache'
-import { GridIcon, SearchIcon, KeyIcon, UsersIcon, TrendUpIcon, FlameIcon, BookmarkIcon, BoardIcon, SparkIcon, XIcon } from './icons'
+import { GridIcon, SearchIcon, KeyIcon, UsersIcon, TrendUpIcon, FlameIcon, BookmarkIcon, BoardIcon, SparkIcon, ShieldIcon, XIcon } from './icons'
 import Logo from './Logo'
 import LanguageToggle from './LanguageToggle'
 import BuzzFeed from './BuzzFeed'
@@ -30,6 +30,8 @@ export default function Sidebar({ savedCount, boardCount, open, onClose }) {
   const navigate = useNavigate()
   const redditFetcher = useCallback(() => fetchReddit(), [])
   const reddit = useCachedResource('reddit', redditFetcher, TTL.hour)
+  const isAdmin = role === 'admin' || role === 'super_admin'
+  const items = isAdmin ? [...NAV, { to: '/admin', key: 'admin', Icon: ShieldIcon }] : NAV
 
   const logout = async () => {
     await signOut()
@@ -58,7 +60,7 @@ export default function Sidebar({ savedCount, boardCount, open, onClose }) {
 
         <div className="flex-1 overflow-y-auto px-3">
           <nav className="space-y-0.5">
-            {NAV.map(({ to, key, Icon, badge }) => {
+            {items.map(({ to, key, Icon, badge }) => {
               const badgeCount = badge === 'saved' ? savedCount : badge === 'board' ? boardCount : 0
               return (
                 <NavLink
