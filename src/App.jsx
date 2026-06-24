@@ -19,6 +19,7 @@ import SavedPage from './pages/SavedPage'
 import KanbanPage from './pages/KanbanPage'
 import AssistantPage from './pages/AssistantPage'
 import ProfilePage from './pages/ProfilePage'
+import AuthCallback from './pages/AuthCallback'
 
 export default function App() {
   return (
@@ -30,6 +31,8 @@ export default function App() {
           <Route path="/forgot-password" element={<ForgotPasswordPage />} />
           <Route path="/reset-password" element={<ResetPasswordPage />} />
         </Route>
+
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         <Route element={<LegalLayout />}>
           <Route path="/cgu" element={<LegalPage doc="cgu" />} />

@@ -45,7 +45,8 @@
     "welcome": "Bon retour !", "createdToast": "Compte créé — confirme par email.", "loggedOut": "Déconnecté.",
     "signingIn": "Connexion…", "creating": "Création…",
     "google": "Continuer avec Google", "or": "ou",
-    "googleNotEnabled": "La connexion Google n'est pas activée côté Supabase (Auth → Providers → Google)."
+    "googleNotEnabled": "La connexion Google n'est pas activée côté Supabase (Auth → Providers → Google).",
+    "connecting": "Connexion en cours…"
   },
   "dashboard": {
     "title": "Tableau de bord", "subtitle": "Ce qui est chaud maintenant — Google Trends + Reddit, scoré automatiquement.",

@@ -92,7 +92,7 @@ export function AuthProvider({ children }) {
       signInWithGoogle: async () => {
         if (!isSupabaseConfigured) return { error: { message: 'not_configured' } }
         localStorage.setItem('marketmax.pending_oauth', '1')
-        return supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: origin } })
+        return supabase.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: `${origin}/auth/callback` } })
       },
       signOut: async (scope) => {
         if (!isSupabaseConfigured) return { error: null }
