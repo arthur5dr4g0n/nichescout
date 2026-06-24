@@ -1,5 +1,7 @@
+import { useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAuth } from '../auth/AuthProvider'
+import { useToast } from './Toast'
 
 function GoogleG() {
   return (
@@ -15,8 +17,24 @@ function GoogleG() {
 export default function GoogleButton() {
   const { t } = useTranslation()
   const { signInWithGoogle } = useAuth()
+  const toast = useToast()
+  const [busy, setBusy] = useState(false)
+
+  const go = async () => {
+    setBusy(true)
+    // On success Supabase redirects the browser to Google; on error it returns here.
+    const { error } = (await signInWithGoogle()) || {}
+    if (error) {
+      setBusy(false)
+      const msg = /not enabled|Unsupported provider/i.test(error.message || '')
+        ? t('auth.googleNotEnabled')
+        : error.message || t('errors.generic')
+      toast?.error(msg)
+    }
+  }
+
   return (
-    <button type="button" onClick={() => signInWithGoogle()} className="btn-ghost w-full">
+    <button type="button" onClick={go} disabled={busy} className="btn-ghost w-full">
       <GoogleG /> {t('auth.google')}
     </button>
   )

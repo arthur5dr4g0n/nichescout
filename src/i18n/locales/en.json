@@ -44,7 +44,8 @@
     "continueGuest": "Continue as guest",
     "welcome": "Welcome back!", "createdToast": "Account created — confirm via email.", "loggedOut": "Logged out.",
     "signingIn": "Signing in…", "creating": "Creating…",
-    "google": "Continue with Google", "or": "or"
+    "google": "Continue with Google", "or": "or",
+    "googleNotEnabled": "Google sign-in isn't enabled in Supabase (Auth → Providers → Google)."
   },
   "dashboard": {
     "title": "Dashboard", "subtitle": "What's hot right now — from Google Trends + Reddit, scored automatically.",
