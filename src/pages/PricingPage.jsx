@@ -93,7 +93,7 @@ export default function PricingPage() {
             {isPro && <Badge tone="brand">{t('pricing.current')}</Badge>}
           </div>
           <p className="mt-1 text-3xl font-bold text-slate-900">
-            {billing === 'yearly' ? '249€' : '29€'}
+            {billing === 'yearly' ? '290€' : '29€'}
             <span className="text-base font-medium text-slate-400">{billing === 'yearly' ? t('pricing.perYear') : t('pricing.perMonth')}</span>
           </p>
           <ul className="mt-4 flex-1 space-y-2.5 text-sm">
@@ -110,7 +110,9 @@ export default function PricingPage() {
               <button className="btn-primary mt-5 w-full" onClick={goPro} disabled={busy}>
                 {busy ? '…' : t('pricing.startTrial')}
               </button>
-              <p className="mt-2 text-center text-xs font-medium text-green-600">{t('pricing.trial')}</p>
+              {billing === 'monthly' && (
+                <p className="mt-2 text-center text-xs font-medium text-green-600">{t('pricing.trial')}</p>
+              )}
             </>
           )}
           <p className="mt-3 text-center text-[11px] leading-relaxed text-slate-400">{t('pricing.secure')}</p>

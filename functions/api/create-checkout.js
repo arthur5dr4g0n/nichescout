@@ -27,7 +27,8 @@ export async function onRequestPost({ env, request }) {
         client_reference_id: user.id,
         'metadata[userId]': user.id,
         'subscription_data[metadata][userId]': user.id,
-        'subscription_data[trial_period_days]': 7,
+        // 7-day free trial on the monthly plan only
+        ...(plan !== 'yearly' && { 'subscription_data[trial_period_days]': 7 }),
         allow_promotion_codes: true,
       }),
     )

@@ -209,9 +209,9 @@
   },
   "pricing": {
     "title": "Pricing", "subtitle": "Pick the plan that fits.",
-    "free": "Free", "proPrice": "$9/mo", "current": "Current plan", "choose": "Go Pro",
+    "free": "Free", "proPrice": "29€/mo", "current": "Current plan", "choose": "Go Pro",
     "comingSoon": "Billing is coming soon — contact us in the meantime.",
-    "monthly": "Monthly", "yearly": "Yearly", "yearlySave": "−28%", "perMonth": "/mo", "perYear": "/yr",
+    "monthly": "Monthly", "yearly": "Yearly", "yearlySave": "2 months free", "perMonth": "/mo", "perYear": "/yr",
     "startTrial": "Start free trial →", "continueFree": "Continue free", "trial": "7-day free trial",
     "secure": "🔒 Secure payment by Stripe · Cancel anytime · No commitment",
     "faqTitle": "FAQ",
