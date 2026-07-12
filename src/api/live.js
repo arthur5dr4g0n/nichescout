@@ -11,3 +11,16 @@ export async function tryLive(path, opts = {}) {
   }
   return r.json()
 }
+
+// Same as tryLive but sends the Supabase access token — required by the
+// authed proxies (/api/rapid, /api/keywords) that guard paid API quotas.
+export async function tryLiveAuthed(path, opts = {}) {
+  const { supabase } = await import('../lib/supabase')
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+  return tryLive(path, {
+    ...opts,
+    headers: { Authorization: `Bearer ${session?.access_token || ''}`, ...(opts.headers || {}) },
+  })
+}

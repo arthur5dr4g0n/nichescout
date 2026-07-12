@@ -1,20 +1,13 @@
-// Amazon data layer. Switches between mock and the RapidAPI
-// "Real-Time Amazon Data" endpoints based on config.
-import axios from 'axios'
-import { USE_MOCK, RAPID_READY, RAPIDAPI_KEY, RAPIDAPI_HOST, COUNTRY } from '../config'
-import { estimateMonthlySales, estimateMonthlyRevenue, estimateFbaFees } from '../utils/estimates'
+// Amazon data layer. Real data goes through the authed server proxy
+// /api/rapid (RapidAPI key stays server-side); falls back to mock when the
+// proxy isn't configured or in explicit mock mode.
+import { USE_MOCK, COUNTRY } from '../config'
+import { tryLiveAuthed } from './live'
+import { estimateMonthlySales, estimateFbaFees } from '../utils/estimates'
 import * as mock from './mockData'
 
-const useRealAmazon = !USE_MOCK && RAPID_READY
-
-const rapid = axios.create({
-  baseURL: `https://${RAPIDAPI_HOST}`,
-  headers: {
-    'X-RapidAPI-Key': RAPIDAPI_KEY,
-    'X-RapidAPI-Host': RAPIDAPI_HOST,
-  },
-  timeout: 20000,
-})
+// Errors that mean "real mode unavailable" -> silently use mock, like before.
+const FALLBACK_ERRORS = ['not_configured', 'offline', 'unauthorized']
 
 // Parse messy price strings like "$24.99" -> 24.99
 function parsePrice(v) {
@@ -57,26 +50,39 @@ function normalizeProduct(item, i) {
   }
 }
 
+async function rapid(params) {
+  const qs = new URLSearchParams({ ...params, country: COUNTRY }).toString()
+  return tryLiveAuthed(`/api/rapid?${qs}`, { timeout: 25000 })
+}
+
 export async function searchProducts(keyword) {
-  if (!useRealAmazon) return mock.searchProducts(keyword)
-  const { data } = await rapid.get('/search', {
-    params: { query: keyword, country: COUNTRY, page: '1' },
-  })
+  if (USE_MOCK) return mock.searchProducts(keyword)
+  let data
+  try {
+    data = await rapid({ op: 'search', query: keyword })
+  } catch (e) {
+    if (FALLBACK_ERRORS.includes(e.message)) return mock.searchProducts(keyword)
+    throw e
+  }
   const products = data?.data?.products || []
   if (!products.length) throw new Error('No products returned by Amazon for this keyword.')
   return products.map(normalizeProduct)
 }
 
 export async function getCompetitors(asin) {
-  if (!useRealAmazon) return mock.getCompetitors(asin)
-  // 1) get the seed product to learn its title/category
-  const { data: details } = await rapid.get('/product-details', {
-    params: { asin, country: COUNTRY },
-  })
+  if (USE_MOCK) return mock.getCompetitors(asin)
+  let details
+  try {
+    // 1) get the seed product to learn its title/category
+    details = await rapid({ op: 'details', asin })
+  } catch (e) {
+    if (FALLBACK_ERRORS.includes(e.message)) return mock.getCompetitors(asin)
+    throw e
+  }
   const seed = details?.data
   const query = seed?.product_title?.split(' ').slice(0, 4).join(' ') || asin
   // 2) search for similar products and take the top 10
-  const { data } = await rapid.get('/search', { params: { query, country: COUNTRY, page: '1' } })
+  const data = await rapid({ op: 'search', query })
   const products = (data?.data?.products || []).slice(0, 10)
   if (!products.length) throw new Error('No competitors found for this ASIN.')
   return products.map(normalizeProduct).map((p, i) => ({ ...p, rank: i + 1 }))

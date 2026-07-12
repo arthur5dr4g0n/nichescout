@@ -1,12 +1,11 @@
-// Keyword data layer. Mock by default; DataForSEO when configured.
-// NOTE: DataForSEO is server-to-server and commonly blocks browser calls via
-// CORS. If you hit a CORS error in real mode, route this through a small proxy
-// (or a serverless function). Mock mode is recommended for keyword research.
-import axios from 'axios'
-import { USE_MOCK, DATAFORSEO_READY, DATAFORSEO_LOGIN, DATAFORSEO_PASSWORD } from '../config'
+// Keyword data layer. Real data goes through the authed server proxy
+// /api/keywords (DataForSEO creds stay server-side — the browser is
+// CORS-blocked by DataForSEO anyway). Mock fallback when unconfigured.
+import { USE_MOCK } from '../config'
+import { tryLiveAuthed } from './live'
 import * as mock from './mockData'
 
-const useRealKeywords = !USE_MOCK && DATAFORSEO_READY
+const FALLBACK_ERRORS = ['not_configured', 'offline', 'unauthorized']
 
 function classifyCompetition(score) {
   if (score == null) return 'Medium'
@@ -16,16 +15,21 @@ function classifyCompetition(score) {
 }
 
 export async function keywordResearch(seed) {
-  if (!useRealKeywords) return mock.keywordResearch(seed)
+  if (USE_MOCK) return mock.keywordResearch(seed)
 
-  const auth = btoa(`${DATAFORSEO_LOGIN}:${DATAFORSEO_PASSWORD}`)
-  const { data } = await axios.post(
-    'https://api.dataforseo.com/v3/keywords_data/google_ads/keywords_for_keywords/live',
-    [{ keywords: [seed], location_code: 2840, language_code: 'en', limit: 18 }],
-    { headers: { Authorization: `Basic ${auth}`, 'Content-Type': 'application/json' }, timeout: 25000 },
-  )
-
-  const items = data?.tasks?.[0]?.result || []
+  let items
+  try {
+    const j = await tryLiveAuthed('/api/keywords', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ seed }),
+      timeout: 30000,
+    })
+    items = j.items || []
+  } catch (e) {
+    if (FALLBACK_ERRORS.includes(e.message)) return mock.keywordResearch(seed)
+    throw e
+  }
   if (!items.length) throw new Error('No keyword data returned.')
 
   return items
