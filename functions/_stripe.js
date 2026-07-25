@@ -16,7 +16,11 @@ export function form(obj) {
 export async function stripeApi(env, path, params) {
   const res = await fetch('https://api.stripe.com/v1/' + path, {
     method: 'POST',
-    headers: { Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`, 'Content-Type': 'application/x-www-form-urlencoded' },
+    headers: {
+      Authorization: `Bearer ${env.STRIPE_SECRET_KEY}`,
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'Stripe-Version': '2026-06-24.dahlia',
+    },
     body: params,
   })
   const data = await res.json().catch(() => ({}))
