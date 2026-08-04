@@ -2,9 +2,9 @@
 // Mirrors vite.proxy.js so live data also works on the deployed site.
 
 const USER_AGENTS = [
-  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36',
-  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.3 Safari/605.1.15',
-  'Mozilla/5.0 (X11; Linux x86_64; rv:123.0) Gecko/20100101 Firefox/123.0',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36',
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Safari/605.1.15',
+  'Mozilla/5.0 (X11; Linux x86_64; rv:140.0) Gecko/20100101 Firefox/140.0',
 ]
 export const pickUA = () => USER_AGENTS[Math.floor(Math.random() * USER_AGENTS.length)]
 
@@ -51,19 +51,78 @@ export function parseRedditRss(xml, sub) {
   return items
 }
 
-export function parseBestsellers(html) {
+const ENTITIES = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ' }
+
+function decodeEntities(s) {
+  return s
+    .replace(/&#x([0-9a-f]+);/gi, (_, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g, (_, d) => String.fromCodePoint(Number(d)))
+    .replace(/&([a-z]+);/gi, (m, n) => ENTITIES[n.toLowerCase()] ?? m)
+}
+
+const clean = (s) => decodeEntities(s).replace(/\s+/g, ' ').trim()
+
+// "1 234,56 €" / "9,99 €" -> 1234.56 / 9.99 (nbsp + narrow nbsp groupers).
+function parsePrice(raw) {
+  if (!raw) return null
+  const normalized = decodeEntities(raw)
+    .replace(/[^\d,.\s  ]/g, '')
+    .replace(/[\s  .]/g, '')
+    .replace(',', '.')
+  const n = Number.parseFloat(normalized)
+  return Number.isFinite(n) ? Math.round(n * 100) / 100 : null
+}
+
+function parseCount(raw) {
+  if (!raw) return null
+  const n = Number.parseInt(decodeEntities(raw).replace(/[^\d]/g, ''), 10)
+  return Number.isFinite(n) ? n : null
+}
+
+// Amazon bestseller grids render one card per `data-asin` block. Splitting on
+// that boundary first is what keeps price/rating/reviews attached to the right
+// product — a whole-page regex cannot, and silently mismatches them.
+export function parseBestsellers(html, limit = 100) {
   const items = []
   const seen = new Set()
-  const re = /\/dp\/([A-Z0-9]{10})[^>]*?>([\s\S]{0,400}?)(?:<\/a>)/g
-  let m
-  while ((m = re.exec(html)) && items.length < 30) {
-    const asin = m[1]
-    if (seen.has(asin)) continue
-    const chunk = m[2]
-    const title = (chunk.match(/alt="([^"]{6,200})"/) || chunk.match(/>([^<]{12,200})</) || [])[1]
+  const cards = html.split(/data-asin="/).slice(1)
+
+  for (const card of cards) {
+    if (items.length >= limit) break
+    const asin = (card.match(/^([A-Z0-9]{10})"/) || [])[1]
+    if (!asin || seen.has(asin)) continue
+
+    // Stop before the next card so a missing field never borrows its neighbour's.
+    const block = card.slice(0, 6000)
+
+    const title =
+      (block.match(/p13n-sc-css-line-clamp-\d+_[^"]*">([^<]{6,400})</) || [])[1] ||
+      (block.match(/class="[^"]*p13n-product-image[^"]*"[^>]*alt="([^"]{6,400})"/) || [])[1] ||
+      (block.match(/alt="([^"]{6,400})"/) || [])[1]
     if (!title) continue
+
+    // Class-name hashes (_3mJ9Z, …) change on every Amazon build — never match them.
+    const price = parsePrice((block.match(/p13n-sc-price[^"]*">([^<]+)</) || [])[1])
+
+    // One aria-label carries both rating and review count, in that order.
+    const meta = block.match(/aria-label="([\d,.]+)\s+sur\s+5[^"]*?,\s*([\d\s  .]+)\s*(?:évaluation|avis|note)/i) || []
+    const rating = meta[1] ? Number.parseFloat(meta[1].replace(',', '.')) : null
+    let reviews = parseCount(meta[2])
+    if (reviews == null) reviews = parseCount((block.match(/class="a-size-small">([\d\s  .]+)</) || [])[1])
+
+    const bsr = parseCount((block.match(/zg-bdg-text">#([\d\s  .]+)</) || [])[1])
+    const image = (block.match(/src="(https:\/\/[^"]+\.(?:jpg|png))"/) || [])[1] || ''
+
     seen.add(asin)
-    items.push({ asin, title: title.replace(/\s+/g, ' ').trim() })
+    items.push({
+      asin,
+      title: clean(title),
+      price,
+      rating: Number.isFinite(rating) ? rating : null,
+      reviews,
+      bsr,
+      image,
+    })
   }
   return items
 }
