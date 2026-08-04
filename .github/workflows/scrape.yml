@@ -1,0 +1,23 @@
+name: Scrape bestsellers
+
+# Every 3 hours: a bestseller chart barely moves faster than that, and a
+# lighter cadence keeps our footprint on Amazon modest.
+on:
+  schedule:
+    - cron: '17 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      # No npm install: the script only uses built-in fetch and our own parser.
+      - run: node scripts/scrape-bestsellers.mjs
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}

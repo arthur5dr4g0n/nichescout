@@ -16,7 +16,7 @@
   },
   "common": {
     "refresh": "actualiser", "updatedAgo": "maj {{time}}", "updating": "mise à jour…",
-    "live": "Live", "mock": "Démo", "cached": "Cache",
+    "live": "Live", "mock": "Démo", "cached": "Cache", "snapshot": "Relevé",
     "save": "Sauvegarder", "saved": "Sauvegardé", "remove": "Retirer",
     "exportCsv": "Export CSV", "clearAll": "Tout effacer", "clear": "Vider",
     "add": "Ajouter", "send": "Envoyer", "tryAgain": "Réessayer",

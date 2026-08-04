@@ -53,7 +53,8 @@ export async function fetchBestsellers(cat = 'electronics') {
       }
     })
     if (items.length < 3) throw new Error('too_few')
-    return { data: items, source: 'live', fetchedAt: j.fetchedAt || null }
+    // 'live' = scraped now, 'snapshot' = last scheduled capture (fetchedAt says when).
+    return { data: items, source: j.source || 'live', fetchedAt: j.fetchedAt || null }
   } catch {
     return { data: mockBestsellers(cat), source: 'mock' }
   }

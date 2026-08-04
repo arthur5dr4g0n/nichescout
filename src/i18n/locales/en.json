@@ -16,7 +16,7 @@
   },
   "common": {
     "refresh": "refresh", "updatedAgo": "updated {{time}}", "updating": "updating…",
-    "live": "Live", "mock": "Mock", "cached": "Cached",
+    "live": "Live", "mock": "Mock", "cached": "Cached", "snapshot": "Snapshot",
     "save": "Save", "saved": "Saved", "remove": "Remove",
     "exportCsv": "Export CSV", "clearAll": "Clear all", "clear": "Clear",
     "add": "Add", "send": "Send", "tryAgain": "Try again",
