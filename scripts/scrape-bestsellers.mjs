@@ -12,29 +12,58 @@
 // ---------------------------------------------------------------------------
 import { pickUA, AMAZON_NODES, parseBestsellers } from '../functions/_shared.js'
 
-const SUPABASE_URL = process.env.SUPABASE_URL
-const SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY
+// A secret pasted without its scheme, or with a stray newline, produces an
+// unhelpful "Failed to parse URL" on every insert — normalise and check once.
+function normalizeUrl(raw) {
+  const s = String(raw || '').trim().replace(/\/+$/, '')
+  if (!s) return null
+  const withScheme = /^https?:\/\//i.test(s) ? s : `https://${s}`
+  try {
+    return new URL(withScheme).origin
+  } catch {
+    return null
+  }
+}
 
-if (!SUPABASE_URL || !SERVICE_KEY) {
-  console.error('Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY')
+const SUPABASE_URL = normalizeUrl(process.env.SUPABASE_URL)
+const SERVICE_KEY = String(process.env.SUPABASE_SERVICE_ROLE_KEY || '').trim()
+
+if (!SUPABASE_URL) {
+  console.error('SUPABASE_URL missing or not a valid URL (expected https://<ref>.supabase.co)')
+  process.exit(1)
+}
+if (!SERVICE_KEY) {
+  console.error('Missing SUPABASE_SERVICE_ROLE_KEY')
   process.exit(1)
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms))
 
-async function fetchCategory(cat) {
+// Amazon blocks datacenter IPs more readily than home connections, and GitHub
+// runners are datacenter IPs. A blocked response is usually transient, so give
+// each category a second try with a different user-agent before giving up.
+async function fetchCategory(cat, attempts = 2) {
   const node = AMAZON_NODES[cat]
-  const r = await fetch(`https://www.amazon.fr/gp/bestsellers/${node}`, {
-    headers: {
-      'User-Agent': pickUA(),
-      'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.5',
-      Accept: 'text/html,application/xhtml+xml',
-    },
-  })
-  if (!r.ok) throw new Error(`http_${r.status}`)
-  const items = parseBestsellers(await r.text())
-  if (items.length < 3) throw new Error('blocked_or_unparseable')
-  return items
+  let lastError
+  for (let i = 0; i < attempts; i++) {
+    if (i > 0) await sleep(8000 + Math.random() * 7000)
+    try {
+      const r = await fetch(`https://www.amazon.fr/gp/bestsellers/${node}`, {
+        headers: {
+          'User-Agent': pickUA(),
+          'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.5',
+          Accept: 'text/html,application/xhtml+xml',
+        },
+      })
+      if (!r.ok) throw new Error(`http_${r.status}`)
+      const items = parseBestsellers(await r.text())
+      if (items.length < 3) throw new Error('blocked_or_unparseable')
+      return items
+    } catch (e) {
+      lastError = e
+    }
+  }
+  throw lastError
 }
 
 async function insert(rows) {
