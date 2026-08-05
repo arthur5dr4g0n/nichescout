@@ -163,7 +163,8 @@ Optional. Free works forever; Stripe unlocks the **Pro** plan (29€/mo or 249�
    SUPABASE_SERVICE_KEY=eyJ…         # service_role (server only!)
    ```
 5. **Webhook:** Stripe → Developers → Webhooks → **Add endpoint** →
-   `https://<your-site>.pages.dev/api/webhook` → select events:
+   `https://<your-site>.pages.dev/api/webhook` (this URL lives on Stripe's side — if the
+   Pages project is ever renamed, come back and update it) → select events:
    `checkout.session.completed`, `customer.subscription.updated`,
    `customer.subscription.deleted`, `invoice.payment_failed`.
    Copy the **Signing secret** into `STRIPE_WEBHOOK_SECRET`, then redeploy.
@@ -244,16 +245,36 @@ Cloudflare Pages rebuilds automatically on push to `main`.
 ### Rename the project to `marketmax`
 The default URL follows the Pages **project name**. To get `marketmax.pages.dev`:
 
+> ⚠️ The old `nichescout.pages.dev` stops resolving the moment you rename — there is no
+> redirect. Any link already shared (demo, bookmark, post) dies with it.
+
 1. Cloudflare → **Workers & Pages → nichescout → Settings → General → Rename** → `marketmax`.
    New URL: `https://marketmax.pages.dev`. The Git link, env vars and Stripe config are **kept**.
-2. **Supabase → Auth → URL Configuration:** set **Site URL** to `https://marketmax.pages.dev`
+2. **Stripe → Developers → Webhooks:** edit the endpoint URL to
+   `https://marketmax.pages.dev/api/webhook` (same events). **This one fails silently:** the
+   endpoint URL is stored on Stripe's side, so events keep firing at the dead domain — a
+   customer pays, Stripe charges them, `checkout.session.completed` never lands, and the
+   account never turns Pro. Cancellations are lost the same way. If Stripe issues a new
+   signing secret, update `STRIPE_WEBHOOK_SECRET` in the Cloudflare env vars and redeploy.
+3. **Supabase → Auth → URL Configuration:** set **Site URL** to `https://marketmax.pages.dev`
    and replace `nichescout` with `marketmax` in **Redirect URLs** (else Google/email auth break).
-3. **Supabase → Auth → Providers → Google:** redirect URL is **unchanged** (it points to
+4. **Supabase → Auth → Providers → Google:** redirect URL is **unchanged** (it points to
    `…supabase.co`, not `pages.dev`).
-4. **Google Cloud Console → OAuth client:** authorized redirect URIs **unchanged** (also `…supabase.co`).
-5. **Stripe success/cancel URLs:** nothing to change — `functions/api/create-checkout.js` builds them
+5. **Google Cloud Console → OAuth client:** authorized redirect URIs **unchanged** (also `…supabase.co`).
+6. **Stripe success/cancel URLs:** nothing to change — `functions/api/create-checkout.js` builds them
    from the request origin (`${origin}`), so they follow the new domain automatically.
-6. `public/robots.txt` + `public/sitemap.xml` already point to `marketmax.pages.dev`.
+7. `public/robots.txt` + `public/sitemap.xml` already point to `marketmax.pages.dev`.
+8. **Leave the localStorage keys alone.** `src/utils/cache.js`, `src/hooks/useSavedProducts.js`
+   and `src/hooks/useKanban.js` prefix their keys with `nichescout.`. Renaming them wipes the
+   saved products and Kanban of every guest user (signed-in accounts resync from Supabase,
+   guests don't). The strings are internal and invisible — the cleanup is not worth the data loss.
+
+Renaming the GitHub repo is **not** required: it has no effect on the public URL or the deploy.
+
+After renaming, verify in this order: log out and back in (Google *and* email), then run a
+`4242 4242 4242 4242` test payment and confirm the account actually **turns Pro** — landing on
+`/payment/success` only proves the redirect works, not the webhook. Stripe → Webhooks should
+show the last delivery at 200.
 
 > ⚠️ From Cloudflare's datacenter IPs, Reddit and Amazon block scraping more aggressively than your
 > home IP, so online they'll often show **mock** data (Google Trends usually stays live). The
